@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jayanta Roy</title>
+<meta name="description" content="Jayanta Roy — AI engineer and final-year Computer Science & Engineering student at BRAC University, Dhaka.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Hind+Siliguri:wght@500&display=swap">
+<style>
+html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0}
+/* Layout: sticky identity column on the left, scrolling work log on the right; stacks to one column on phones. */
+:root{
+  --bg:#f6f7f5;
+  --surface:#ffffff;
+  --fg:#1a1e1c;
+  --muted:#5b6560;
+  --line:#dde2de;
+  --accent:#0b6b4f;
+  --accent-soft:#e3efe9;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --f-bn:"Hind Siliguri", "Noto Sans Bengali", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111513; --surface:#171c19; --fg:#e4e9e5; --muted:#98a39c;
+    --line:#29302c; --accent:#5cc29c; --accent-soft:#1c2b24; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111513; --surface:#171c19; --fg:#e4e9e5; --muted:#98a39c;
+  --line:#29302c; --accent:#5cc29c; --accent-soft:#1c2b24; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,5vw,48px);padding-block:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px)}
+/* identity column */
+.id{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;min-height:100vh;display:flex;flex-direction:column;gap:32px;padding-block:clamp(40px,9vh,96px)}
+.name{font-family:var(--f-display);font-weight:700;font-size:clamp(2.4rem,4.6vw,3.4rem);line-height:1.02;letter-spacing:-0.02em;margin:0;text-wrap:balance}
+.bn{font-family:var(--f-bn);font-weight:500;font-size:1.15rem;color:var(--muted);margin:10px 0 0}
+.role{font-family:var(--f-display);font-weight:500;font-size:1.2rem;margin:20px 0 0}
+.lede{color:var(--muted);max-width:34ch;margin:10px 0 0}
+nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+nav a{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-block:4px}
+nav a::before{content:"";width:28px;height:1px;background:currentColor;transition:width .2s ease}
+nav a:hover,nav a.on{color:var(--fg)}
+nav a:hover::before,nav a.on::before{width:56px;background:var(--accent)}
+.contact{margin-top:auto;display:flex;flex-direction:column;gap:10px;font-size:.92rem}
+.links{display:flex;flex-wrap:wrap;gap:8px 20px}
+.links a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
+.links a:hover{border-color:var(--accent);color:var(--accent)}
+.mail{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.84rem;color:var(--muted)}
+.mail span{user-select:all}
+.copy{font:inherit;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--fg);padding:3px 8px;border-radius:4px;cursor:pointer}
+.copy:hover{border-color:var(--accent)}
+.avail{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.avail::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+/* main column */
+main{padding-block:clamp(40px,9vh,96px);display:flex;flex-direction:column;gap:clamp(64px,10vh,112px);min-width:0}
+section{scroll-margin-top:32px}
+h2{font-family:var(--f-mono);font-weight:500;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
+.about p{margin:0 0 16px;max-width:62ch}
+.about p:last-child{margin-bottom:0}
+.about strong{font-weight:600}
+.group{font-family:var(--f-display);font-weight:500;font-size:1.05rem;color:var(--muted);margin:40px 0 12px}
+.group:first-of-type{margin-top:0}
+.proj{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.proj li{padding-block:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.proj li:last-child{border-bottom:1px solid var(--line)}
+.p-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.p-title{font-family:var(--f-display);font-weight:700;font-size:1.3rem;line-height:1.25;margin:0;letter-spacing:-0.01em;text-wrap:balance}
+.p-title a{text-decoration:none}
+.p-title a:hover{color:var(--accent)}
+.status{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.status.live{color:var(--accent)}
+.p-desc{margin:0;color:var(--fg);max-width:62ch}
+.p-list{margin:0;padding-left:18px;color:var(--muted);max-width:62ch;display:flex;flex-direction:column;gap:4px}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.stack span{font-family:var(--f-mono);font-size:.74rem;background:var(--accent-soft);color:var(--fg);padding:2px 8px;border-radius:3px}
+.p-links{display:flex;gap:18px;font-family:var(--f-mono);font-size:.8rem}
+.p-links a{text-decoration:none;color:var(--accent)}
+.p-links a:hover{text-decoration:underline}
+.edu{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;align-items:baseline}
+.edu h3{font-family:var(--f-display);font-weight:700;font-size:1.2rem;margin:0}
+.edu .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);text-align:right}
+.edu .deg{color:var(--muted);margin:0}
+.edu .course{grid-column:1/-1;margin:12px 0 0;color:var(--muted);font-size:.94rem;max-width:62ch}
+.certs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.certs li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding-block:14px;border-top:1px solid var(--line);align-items:baseline}
+.certs li:last-child{border-bottom:1px solid var(--line)}
+.certs .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.skills{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:12px 24px;margin:0}
+.skills dt{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.skills dd{margin:0}
+footer{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);border-top:1px solid var(--line);padding-top:20px}
+@media (max-width:860px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0}
+  .id{position:static;min-height:0;padding-block:48px 8px}
+  nav{display:none}
+  .contact{margin-top:0}
+  main{padding-block:40px 56px}
+}
+@media (max-width:480px){
+  .skills{grid-template-columns:minmax(0,1fr);gap:4px}
+  .skills dd{margin-bottom:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="id">
+    <div>
+      <h1 class="name">Jayanta Roy</h1>
+      <p class="bn" lang="bn">জয়ন্ত রায়</p>
+      <p class="role">AI engineer</p>
+      <p class="lede">Final-year Computer Science &amp; Engineering student at BRAC University. I build retrieval systems and deep learning pipelines in Python.</p>
+    </div>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#about" data-sec="about">About</a></li>
+        <li><a href="#projects" data-sec="projects">Projects</a></li>
+        <li><a href="#skills" data-sec="skills">Skills</a></li>
+        <li><a href="#education" data-sec="education">Education</a></li>
+      </ul>
+    </nav>
+    <div class="contact">
+      <div class="links">
+        <a href="https://github.com/roy032" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/jayanta-roy-b80357407/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="mail"><span id="email">jroyakash4@gmail.com</span><button class="copy" id="copy-email" type="button">Copy</button></div>
+      <div class="avail">Dhaka, Bangladesh · open to remote roles</div>
+    </div>
+  </header>
+
+  <main>
+    <section id="about" class="about">
+      <h2>About</h2>
+      <p>I am in the final semester of a B.Sc. in Computer Science and Engineering at BRAC University, graduating in January 2027. My work sits between machine learning and software engineering: taking a model or a retrieval method and turning it into a pipeline that runs end to end.</p>
+      <p>Right now I am building a <strong>bilingual Bangla and English RAG assistant</strong> over Bangladeshi law, and my undergraduate thesis adapts ImageNet-pretrained vision backbones to brain MRI classification. Before that I worked on full-stack web applications in a team.</p>
+      <p>I am looking for AI/ML engineering or software engineering roles starting February 2027.</p>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+
+      <p class="group">AI and machine learning</p>
+      <ul class="proj">
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Bilingual Legal RAG Assistant</a></h3>
+            <span class="status live">In progress</span>
+          </div>
+          <p class="p-desc">A retrieval-augmented question-answering system over Bangladeshi statutes that answers in Bangla or English.</p>
+          <ul class="p-list">
+            <li>Ingestion pipeline that scrapes statutes and chunks them by legal structure (Act, Section, Subsection) instead of token count.</li>
+            <li>Normalized, context-aware chunks with automated quality checks at each stage.</li>
+            <li>Next: embeddings and semantic search on Qdrant.</li>
+          </ul>
+          <div class="stack"><span>Python</span><span>RAG</span><span>Qdrant</span><span>LLM APIs</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Source</a></div>
+        </li>
+        <li>
+          <div class="p-head">
+            <h3 class="p-title">Healthy-Reference-Guided Brain MRI Classification</h3>
+            <span class="status live">Thesis · in progress</span>
+          </div>
+          <p class="p-desc">A four-class brain MRI classifier: Healthy, Alzheimer's, Parkinson's and Multiple Sclerosis.</p>
+          <ul class="p-list">
+            <li>Adapts ImageNet-pretrained ConvNeXt-Tiny and Swin-Tiny to MRI through masked-autoencoder self-supervised domain adaptation.</li>
+            <li>A Healthy Reference Memory of 8 learnable prototypes, retrieved by cross-attention, feeding a Kolmogorov–Arnold Network head for interpretable predictions.</li>
+            <li>Training on public OASIS and Kaggle MRI datasets; benchmark results pending.</li>
+          </ul>
+          <div class="stack"><span>PyTorch</span><span>timm</span><span>ConvNeXt</span><span>Swin</span><span>MAE</span></div>
+        </li>
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Student Academic Outcome Prediction</a></h3>
+            <span class="status">Complete</span>
+          </div>
+          <p class="p-desc">An end-to-end classification pipeline predicting student academic outcomes.</p>
+          <ul class="p-list">
+            <li>EDA, imputation and mutual-information feature selection.</li>
+            <li>Logistic Regression, Gaussian Naive Bayes and an MLP compared on a stratified 64/16/20 split, plus KMeans and PCA clustering.</li>
+          </ul>
+          <div class="stack"><span>scikit-learn</span><span>pandas</span><span>NumPy</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Source</a></div>
+        </li>
+      </ul>
+
+      <p class="group">Software</p>
+      <ul class="proj">
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Travelo</a></h3>
+            <span class="status">Team of 3</span>
+          </div>
+          <p class="p-desc">A full-stack trip-planning platform with itineraries, expense splitting and destination maps.</p>
+          <ul class="p-list">
+            <li>I built authentication, document verification and real-time group chat and notifications.</li>
+            <li>REST APIs with Express and MongoDB, JWT auth, and a map view with React Leaflet.</li>
+          </ul>
+          <div class="stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Source</a></div>
+        </li>
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/penalty-shootout-opengl" target="_blank" rel="noopener">Penalty Shootout</a></h3>
+            <span class="status">Complete</span>
+          </div>
+          <p class="p-desc">A 3D penalty-shootout game with player-vs-player and player-vs-computer modes.</p>
+          <ul class="p-list">
+            <li>AI goalkeeper with adjustable reaction time, reach and guess accuracy; full match simulation with sudden death.</li>
+            <li>Ball trajectory animation and a polar-coordinate camera.</li>
+          </ul>
+          <div class="stack"><span>Python</span><span>PyOpenGL</span><span>GLUT</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/penalty-shootout-opengl" target="_blank" rel="noopener">Source</a></div>
+        </li>
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/network-design-vlsm" target="_blank" rel="noopener">Enterprise Network Design</a></h3>
+            <span class="status">Coursework</span>
+          </div>
+          <p class="p-desc">A hierarchical, VLSM-subnetted network for 4 sites and about 2,100 hosts, with OSPF and static routing, central DHCP and DNS, and hosted web and email services.</p>
+          <div class="stack"><span>Cisco Packet Tracer</span><span>OSPF</span><span>VLSM</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/network-design-vlsm" target="_blank" rel="noopener">Source</a></div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Languages</dt><dd>Python, JavaScript/TypeScript, SQL, C++</dd>
+        <dt>ML</dt><dd>PyTorch, timm, scikit-learn, pandas, NumPy</dd>
+        <dt>AI engineering</dt><dd>RAG pipelines, embeddings, Qdrant, LLM APIs, prompt design</dd>
+        <dt>Web</dt><dd>React, Node.js, Express, MongoDB, Socket.IO, REST APIs, JWT</dd>
+        <dt>Tools</dt><dd>Git, GitHub, Linux, Jupyter, Google Colab, Postman</dd>
+      </dl>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <div class="edu">
+        <h3>BRAC University</h3>
+        <span class="when">Expected Jan 2027</span>
+        <p class="deg">B.Sc. in Computer Science and Engineering · Dhaka</p>
+        <p class="course">Coursework: Machine Learning, Data Structures and Algorithms, Database Management Systems, Object-Oriented Programming, Computer Networks.</p>
+      </div>
+      <h2 style="margin-top:48px">Certifications</h2>
+      <ul class="certs">
+        <li><span>DataCamp — AI Engineer for Developers (Associate)</span><span class="when">Feb 2026</span></li>
+        <li><span>DataCamp — Data Analyst (Associate)</span><span class="when">Aug 2025</span></li>
+      </ul>
+    </section>
+
+    <footer>Jayanta Roy · Dhaka</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var btn=document.getElementById('copy-email');
+  var em=document.getElementById('email');
+  btn.addEventListener('click',function(){
+    var t=em.textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected';}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy'},1600)},sel);
+    } else sel();
+  });
+  var links=[].slice.call(document.querySelectorAll('nav a'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.dataset.sec===e.target.id)})}});
+    },{rootMargin:'-40% 0px -55% 0px'});
+    ['about','projects','skills','education'].forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
+  }
+})();
+</script>
+</body>
+</html>
