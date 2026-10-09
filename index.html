@@ -156,15 +156,15 @@ footer{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);border-top:
         <li>
           <div class="p-head">
             <h3 class="p-title"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Bilingual Legal RAG Assistant</a></h3>
-            <span class="status live">In progress</span>
+            <span class="status">Complete</span>
           </div>
-          <p class="p-desc">A retrieval-augmented question-answering system over Bangladeshi statutes that answers in Bangla or English.</p>
+          <p class="p-desc">A retrieval-augmented question-answering system over Bangladeshi statutes that answers in Bangla or English with section-level citations.</p>
           <ul class="p-list">
-            <li>Ingestion pipeline that scrapes statutes and chunks them by legal structure (Act, Section, Subsection) instead of token count.</li>
-            <li>Normalized, context-aware chunks with automated quality checks at each stage.</li>
-            <li>Next: embeddings and semantic search on Qdrant.</li>
+            <li>Statutes scraped and chunked by legal structure (Act, Section, Subsection), with cross-reference resolution, a bilingual legal glossary and transliteration.</li>
+            <li>Dense retrieval with bge-m3 reaches recall@5 of 0.90 on a held-out bilingual test set; answers from a local Qwen2.5 model via Ollama.</li>
+            <li>Streaming web service with answer permalinks and feedback, plus a tool-using agent mode for multi-section questions.</li>
           </ul>
-          <div class="stack"><span>Python</span><span>RAG</span><span>Qdrant</span><span>LLM APIs</span></div>
+          <div class="stack"><span>Python</span><span>RAG</span><span>bge-m3</span><span>Ollama</span><span>Starlette</span></div>
           <div class="p-links"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Source</a></div>
         </li>
         <li>
@@ -185,18 +185,44 @@ footer{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);border-top:
             <h3 class="p-title"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Student Academic Outcome Prediction</a></h3>
             <span class="status">Complete</span>
           </div>
-          <p class="p-desc">An end-to-end classification pipeline predicting student academic outcomes.</p>
+          <p class="p-desc">Predicts whether a student drops out, stays enrolled or graduates, from information available at enrolment.</p>
           <ul class="p-list">
-            <li>EDA, imputation and mutual-information feature selection.</li>
-            <li>Logistic Regression, Gaussian Naive Bayes and an MLP compared on a stratified 64/16/20 split, plus KMeans and PCA clustering.</li>
+            <li>Exploratory analysis, imputation, mutual-information feature selection and KMeans/PCA clustering.</li>
+            <li>Leakage-free scikit-learn pipelines compared by stratified cross-validation on macro-F1, with class weighting for the minority class.</li>
           </ul>
           <div class="stack"><span>scikit-learn</span><span>pandas</span><span>NumPy</span></div>
           <div class="p-links"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Source</a></div>
+        </li>
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">CineScope</a></h3>
+            <span class="status live">In progress</span>
+          </div>
+          <p class="p-desc">Computer vision for film analysis: shot cuts, framing, faces and color, built phase by phase.</p>
+          <ul class="p-list">
+            <li>Each phase implements the core method from scratch first, then benchmarks it against the production library.</li>
+            <li>Built so far: classical shot-boundary and camera-motion detection, a CNN shot-framing classifier and a face detector trained on Kaggle GPUs.</li>
+          </ul>
+          <div class="stack"><span>Python</span><span>PyTorch</span><span>OpenCV</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">Source</a></div>
         </li>
       </ul>
 
       <p class="group">Software</p>
       <ul class="proj">
+        <li>
+          <div class="p-head">
+            <h3 class="p-title"><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">SupportFlow</a></h3>
+            <span class="status">Complete</span>
+          </div>
+          <p class="p-desc">A support-automation pipeline: signed Tally webhooks are classified by an LLM and summarised to Slack.</p>
+          <ul class="p-list">
+            <li>HMAC-verified, idempotent webhook intake; LLM output validated against a JSON schema with Pydantic and retried with feedback.</li>
+            <li>Every stage and failure is stored, with Slack retries, monitoring endpoints and a replay command for unfinished events.</li>
+          </ul>
+          <div class="stack"><span>Python</span><span>FastAPI</span><span>SQLAlchemy</span><span>Ollama</span><span>Slack</span></div>
+          <div class="p-links"><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">Source</a></div>
+        </li>
         <li>
           <div class="p-head">
             <h3 class="p-title"><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Travelo</a></h3>
