@@ -161,7 +161,7 @@ footer{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);border-top:
           <p class="p-desc">A retrieval-augmented question-answering system over Bangladeshi statutes that answers in Bangla or English with section-level citations.</p>
           <ul class="p-list">
             <li>Statutes scraped and chunked by legal structure (Act, Section, Subsection), with cross-reference resolution, a bilingual legal glossary and transliteration.</li>
-            <li>Dense retrieval with bge-m3 reaches recall@5 of 0.90 on a held-out bilingual test set; answers from a local Qwen2.5 model via Ollama.</li>
+            <li>Dense retrieval with bge-m3 puts the right section in the top 5 for 85% of 86 test questions; with a local Qwen2.5-14B via Ollama, 100% of citations point at retrieved text and 71% of answers are judged correct (95% bootstrap intervals in the README).</li>
             <li>Streaming web service with answer permalinks and feedback, plus a tool-using agent mode for multi-section questions.</li>
           </ul>
           <div class="stack"><span>Python</span><span>RAG</span><span>bge-m3</span><span>Ollama</span><span>Starlette</span></div>
