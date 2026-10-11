@@ -3,325 +3,231 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jayanta Roy</title>
-<meta name="description" content="Jayanta Roy — AI/ML and software engineer, final-year Computer Science student at BRAC University, Dhaka.">
+<title>roy032</title>
+<meta name="description" content="AI/ML and software engineer in training. Retrieval systems, evaluation, and pipelines that run end to end.">
+<meta name="theme-color" content="#0b0d10">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230b0d10'/%3E%3Cellipse cx='256' cy='256' rx='118' ry='168' fill='none' stroke='%23e8ece9' stroke-width='28'/%3E%3Cpath d='M338 128L174 384' stroke='%238ef0c8' stroke-width='28' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Hind+Siliguri:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap">
 <style>
-html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0}
-/* Layout: sticky identity column on the left, scrolling work log on the right; stacks to one column on phones. */
 :root{
-  --bg:#f6f7f5;
-  --surface:#ffffff;
-  --fg:#1a1e1c;
-  --muted:#5b6560;
-  --line:#dde2de;
-  --accent:#0b6b4f;
-  --accent-soft:#e3efe9;
-  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --f-bn:"Hind Siliguri", "Noto Sans Bengali", sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#111513; --surface:#171c19; --fg:#e4e9e5; --muted:#98a39c;
-    --line:#29302c; --accent:#5cc29c; --accent-soft:#1c2b24; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#111513; --surface:#171c19; --fg:#e4e9e5; --muted:#98a39c;
-  --line:#29302c; --accent:#5cc29c; --accent-soft:#1c2b24; color-scheme:dark;
+  --bg:#0b0d10; --panel:#11151a; --fg:#e8ece9; --muted:#8a948f; --line:#1f262c; --accent:#8ef0c8; --accent-ink:#0b0d10;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:"Inter Tight","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
-.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,5vw,48px);padding-block:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px)}
-/* identity column */
-.id{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;min-height:100vh;display:flex;flex-direction:column;gap:32px;padding-block:clamp(40px,9vh,96px)}
-.name{font-family:var(--f-display);font-weight:700;font-size:clamp(2.4rem,4.6vw,3.4rem);line-height:1.02;letter-spacing:-0.02em;margin:0;text-wrap:balance}
-.bn{font-family:var(--f-bn);font-weight:500;font-size:1.15rem;color:var(--muted);margin:10px 0 0}
-.role{font-family:var(--f-display);font-weight:500;font-size:1.2rem;margin:20px 0 0}
-.lede{color:var(--muted);max-width:34ch;margin:10px 0 0}
-nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-nav a{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-block:4px}
-nav a::before{content:"";width:28px;height:1px;background:currentColor;transition:width .2s ease}
-nav a:hover,nav a.on{color:var(--fg)}
-nav a:hover::before,nav a.on::before{width:56px;background:var(--accent)}
-.contact{margin-top:auto;display:flex;flex-direction:column;gap:10px;font-size:.92rem}
-.links{display:flex;flex-wrap:wrap;gap:8px 20px}
-.links a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
-.links a:hover{border-color:var(--accent);color:var(--accent)}
-.mail{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.84rem;color:var(--muted)}
-.mail span{user-select:all}
-.copy{font:inherit;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--fg);padding:3px 8px;border-radius:4px;cursor:pointer}
+.wrap{max-width:780px;margin:0 auto;padding:0 clamp(18px,5vw,32px)}
+header{padding:clamp(40px,10vh,88px) 0 24px}
+.logo{width:60px;height:60px;display:block;margin-bottom:28px}
+.prompt{font:400 .85rem/1.5 var(--mono);color:var(--muted);margin:0 0 10px}
+.prompt b{color:var(--accent);font-weight:500}
+h1{font-weight:700;font-size:clamp(2.2rem,6.4vw,3.4rem);line-height:1.05;letter-spacing:-.025em;margin:0 0 18px;text-wrap:balance}
+.lede{color:var(--muted);max-width:56ch;margin:0}
+.lede strong{color:var(--fg);font-weight:500}
+nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:28px;font:400 .8rem var(--mono);letter-spacing:.04em}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--accent)}
+section{padding:44px 0 4px;scroll-margin-top:12px}
+h2{font:500 .78rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 22px;display:flex;align-items:center;gap:12px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 22px 20px;margin:0 0 14px}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;align-items:baseline}
+.card h3{font-size:1.18rem;line-height:1.3;margin:0;font-weight:600;letter-spacing:-.01em}
+.card h3 a{text-decoration:none}
+.card h3 a:hover{color:var(--accent)}
+.tag{font:400 .72rem var(--mono);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.tag.on{color:var(--accent)}
+.card p{margin:8px 0 0;color:var(--muted);max-width:64ch}
+.metrics{display:flex;flex-wrap:wrap;gap:8px 28px;margin:16px 0 4px;padding:0;list-style:none}
+.metrics li{display:flex;flex-direction:column}
+.metrics b{font:500 1.35rem/1.1 var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.metrics span{font:400 .7rem var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:3px;max-width:15ch}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.stack span{font:400 .72rem var(--mono);border:1px solid var(--line);color:var(--muted);padding:2px 8px;border-radius:99px}
+.links{margin-top:14px;font:400 .8rem var(--mono)}
+.links a{color:var(--accent);text-decoration:none}
+.links a:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid .card{margin:0}
+.prin{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.prin li{display:grid;grid-template-columns:2.2rem 1fr;gap:6px}
+.prin i{font:400 .8rem/1.9 var(--mono);color:var(--accent);font-style:normal}
+.prin p{margin:0;color:var(--muted)}
+.prin strong{color:var(--fg);font-weight:600}
+dl.stk{display:grid;grid-template-columns:8.5rem 1fr;gap:10px 18px;margin:0}
+dl.stk dt{font:400 .75rem/1.9 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+dl.stk dd{margin:0}
+#feed{list-style:none;margin:0;padding:0;font:400 .84rem/1.5 var(--mono)}
+#feed li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid var(--line);color:var(--muted)}
+#feed li:last-child{border-bottom:1px solid var(--line)}
+#feed a{color:var(--fg);text-decoration:none}
+#feed a:hover{color:var(--accent)}
+#feed time{white-space:nowrap}
+.note{font:400 .76rem var(--mono);color:var(--muted);margin:10px 0 0}
+.cta{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.mail{font:500 .95rem var(--mono);color:var(--accent-ink);background:var(--accent);padding:10px 16px;border-radius:8px;text-decoration:none}
+.mail:hover{filter:brightness(1.08)}
+.copy{font:400 .78rem var(--mono);background:none;color:var(--fg);border:1px solid var(--line);padding:9px 12px;border-radius:8px;cursor:pointer}
 .copy:hover{border-color:var(--accent)}
-.avail{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:8px}
-.avail::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
-/* main column */
-main{padding-block:clamp(40px,9vh,96px);display:flex;flex-direction:column;gap:clamp(64px,10vh,112px);min-width:0}
-section{scroll-margin-top:32px}
-h2{font-family:var(--f-mono);font-weight:500;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 24px}
-.about p{margin:0 0 16px;max-width:62ch}
-.about p:last-child{margin-bottom:0}
-.about strong{font-weight:600}
-.group{font-family:var(--f-display);font-weight:500;font-size:1.05rem;color:var(--muted);margin:40px 0 12px}
-.group:first-of-type{margin-top:0}
-.proj{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.proj li{padding-block:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-.proj li:last-child{border-bottom:1px solid var(--line)}
-.p-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
-.p-title{font-family:var(--f-display);font-weight:700;font-size:1.3rem;line-height:1.25;margin:0;letter-spacing:-0.01em;text-wrap:balance}
-.p-title a{text-decoration:none}
-.p-title a:hover{color:var(--accent)}
-.status{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.status.live{color:var(--accent)}
-.p-desc{margin:0;color:var(--fg);max-width:62ch}
-.p-list{margin:0;padding-left:18px;color:var(--muted);max-width:62ch;display:flex;flex-direction:column;gap:4px}
-.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.stack span{font-family:var(--f-mono);font-size:.74rem;background:var(--accent-soft);color:var(--fg);padding:2px 8px;border-radius:3px}
-.p-links{display:flex;gap:18px;font-family:var(--f-mono);font-size:.8rem}
-.p-links a{text-decoration:none;color:var(--accent)}
-.p-links a:hover{text-decoration:underline}
-.edu{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;align-items:baseline}
-.edu h3{font-family:var(--f-display);font-weight:700;font-size:1.2rem;margin:0}
-.edu .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);text-align:right}
-.edu .deg{color:var(--muted);margin:0}
-.edu .course{grid-column:1/-1;margin:12px 0 0;color:var(--muted);font-size:.94rem;max-width:62ch}
-.certs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.certs li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding-block:14px;border-top:1px solid var(--line);align-items:baseline}
-.certs li:last-child{border-bottom:1px solid var(--line)}
-.certs .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
-.skills{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:12px 24px;margin:0}
-.skills dt{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
-.skills dd{margin:0}
-footer{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);border-top:1px solid var(--line);padding-top:20px}
-@media (max-width:860px){
-  .wrap{grid-template-columns:minmax(0,1fr);gap:0}
-  .id{position:static;min-height:0;padding-block:48px 8px}
-  nav{display:none}
-  .contact{margin-top:0}
-  main{padding-block:40px 56px}
-}
-@media (max-width:480px){
-  .skills{grid-template-columns:minmax(0,1fr);gap:4px}
-  .skills dd{margin-bottom:10px}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+footer{margin-top:64px;padding:22px 0 44px;border-top:1px solid var(--line);font:400 .74rem var(--mono);color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cur::after{content:"";display:inline-block;width:.55em;height:1em;background:var(--accent);margin-left:4px;vertical-align:-2px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (max-width:640px){.grid{grid-template-columns:minmax(0,1fr)}dl.stk{grid-template-columns:minmax(0,1fr);gap:2px}dl.stk dd{margin-bottom:12px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cur::after{animation:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="id">
-    <div>
-      <h1 class="name">Jayanta Roy</h1>
-      <p class="bn" lang="bn">জয়ন্ত রায়</p>
-      <p class="role">AI/ML and software engineer</p>
-      <p class="lede">Final-year Computer Science student at BRAC University. I build retrieval systems and deep learning pipelines in Python.</p>
-    </div>
-    <nav aria-label="Sections">
-      <ul>
-        <li><a href="#about" data-sec="about">About</a></li>
-        <li><a href="#projects" data-sec="projects">Projects</a></li>
-        <li><a href="#skills" data-sec="skills">Skills</a></li>
-        <li><a href="#education" data-sec="education">Education</a></li>
-      </ul>
-    </nav>
-    <div class="contact">
-      <div class="links">
-        <a href="https://github.com/roy032" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/jayanta-roy-b80357407/" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-      <div class="mail"><span id="email">jroyakash4@gmail.com</span><button class="copy" id="copy-email" type="button">Copy</button></div>
-      <div class="avail">Dhaka, Bangladesh · open to remote roles</div>
-    </div>
-  </header>
+<header>
+  <svg class="logo" viewBox="0 0 512 512" role="img" aria-label="roy032 mark"><rect width="512" height="512" rx="96" fill="#0b0d10"/><ellipse cx="256" cy="256" rx="118" ry="168" fill="none" stroke="#e8ece9" stroke-width="22"/><path d="M338 128L174 384" stroke="#8ef0c8" stroke-width="22" stroke-linecap="round"/></svg>
+  <p class="prompt"><b>$</b> whoami<span class="cur"></span></p>
+  <h1>roy032</h1>
+  <p class="lede">AI/ML and software engineer in training. I build <strong>retrieval systems</strong>, <strong>evaluation harnesses</strong> and pipelines that run end to end, and I report what they measure, including the parts that fall short.</p>
+  <nav aria-label="Sections"><a href="#work">work</a><a href="#approach">approach</a><a href="#stack">stack</a><a href="#activity">activity</a><a href="#contact">contact</a></nav>
+</header>
 
-  <main>
-    <section id="about" class="about">
-      <h2>About</h2>
-      <p>I am in the final year of a B.Sc. in Computer Science at BRAC University, graduating in January 2027. My work sits between machine learning and software engineering: taking a model or a retrieval method and turning it into a pipeline that runs end to end.</p>
-      <p>Right now I am building a <strong>bilingual Bangla and English RAG assistant</strong> over Bangladeshi law, and my undergraduate thesis adapts ImageNet-pretrained vision backbones to brain MRI classification. Before that I worked on full-stack web applications in a team.</p>
-      <p>I am looking for AI/ML engineering or software engineering roles starting January 2027, after my thesis defence.</p>
-    </section>
+<main>
+<section id="work">
+  <h2>Selected work</h2>
 
-    <section id="projects">
-      <h2>Projects</h2>
+  <article class="card">
+    <div class="top"><h3><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Bilingual Legal RAG</a></h3><span class="tag">Complete</span></div>
+    <p>Question answering over Bangladeshi statutes in Bangla and English. Every sentence cites a section, and the system refuses when the corpus has no answer. Built evaluation-first: the retrieval setup was chosen by measurement, not by default.</p>
+    <ul class="metrics">
+      <li><b>0.85</b><span>right section in top 5</span></li>
+      <li><b>1.00</b><span>valid citations (14B)</span></li>
+      <li><b>0.71</b><span>answers judged correct (14B)</span></li>
+      <li><b>258</b><span>automated tests</span></li>
+    </ul>
+    <p class="note">86 held-out questions, 95% bootstrap intervals in the repo. Qwen2.5 via Ollama, bge-m3 retrieval.</p>
+    <div class="stack"><span>Python</span><span>RAG</span><span>bge-m3</span><span>BM25 + RRF</span><span>Ollama</span><span>Starlette</span></div>
+    <div class="links"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">source &rarr;</a></div>
+  </article>
 
-      <p class="group">AI and machine learning</p>
-      <ul class="proj">
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Bilingual Legal RAG Assistant</a></h3>
-            <span class="status">Complete</span>
-          </div>
-          <p class="p-desc">A retrieval-augmented question-answering system over Bangladeshi statutes that answers in Bangla or English with section-level citations.</p>
-          <ul class="p-list">
-            <li>Statutes scraped and chunked by legal structure (Act, Section, Subsection), with cross-reference resolution, a bilingual legal glossary and transliteration.</li>
-            <li>Dense retrieval with bge-m3 puts the right section in the top 5 for 85% of 86 test questions; with a local Qwen2.5-14B via Ollama, 100% of citations point at retrieved text and 71% of answers are judged correct (95% bootstrap intervals in the README).</li>
-            <li>Streaming web service with answer permalinks and feedback, plus a tool-using agent mode for multi-section questions.</li>
-          </ul>
-          <div class="stack"><span>Python</span><span>RAG</span><span>bge-m3</span><span>Ollama</span><span>Starlette</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/bd-legal-rag" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title">Healthy-Reference-Guided Brain MRI Classification</h3>
-            <span class="status live">Thesis · in progress</span>
-          </div>
-          <p class="p-desc">A four-class brain MRI classifier: Healthy, Alzheimer's, Parkinson's and Multiple Sclerosis.</p>
-          <ul class="p-list">
-            <li>Adapts ImageNet-pretrained ConvNeXt-Tiny and Swin-Tiny to MRI through masked-autoencoder self-supervised domain adaptation.</li>
-            <li>A Healthy Reference Memory of 8 learnable prototypes, retrieved by cross-attention, feeding a Kolmogorov–Arnold Network head for interpretable predictions.</li>
-            <li>Training on public OASIS and Kaggle MRI datasets; benchmark results pending.</li>
-          </ul>
-          <div class="stack"><span>PyTorch</span><span>timm</span><span>ConvNeXt</span><span>Swin</span><span>MAE</span></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Student Academic Outcome Prediction</a></h3>
-            <span class="status">Complete</span>
-          </div>
-          <p class="p-desc">Predicts whether a student drops out, stays enrolled or graduates, from information available at enrolment.</p>
-          <ul class="p-list">
-            <li>Exploratory analysis, imputation, mutual-information feature selection and KMeans/PCA clustering.</li>
-            <li>Leakage-free scikit-learn pipelines compared by stratified cross-validation on macro-F1, with class weighting for the minority class.</li>
-          </ul>
-          <div class="stack"><span>scikit-learn</span><span>pandas</span><span>NumPy</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">CineScope</a></h3>
-            <span class="status live">In progress</span>
-          </div>
-          <p class="p-desc">Computer vision for film analysis: shot cuts, framing, faces and color, built phase by phase.</p>
-          <ul class="p-list">
-            <li>Each phase implements the core method from scratch first, then benchmarks it against the production library.</li>
-            <li>Built so far: classical shot-boundary and camera-motion detection, a CNN shot-framing classifier and a face detector trained on Kaggle GPUs.</li>
-          </ul>
-          <div class="stack"><span>Python</span><span>PyTorch</span><span>OpenCV</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">Source</a></div>
-        </li>
-      </ul>
+  <article class="card">
+    <div class="top"><h3><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">SupportFlow</a></h3><span class="tag">Complete</span></div>
+    <p>Signed webhooks in, structured triage out. An LLM classifies each customer message (English or Bangla) by category, urgency and sentiment, the output is schema-validated and retried with feedback, and a summary lands in Slack.</p>
+    <ul class="metrics">
+      <li><b>74</b><span>automated tests</span></li>
+      <li><b>HMAC</b><span>verified, idempotent intake</span></li>
+    </ul>
+    <p class="note">Every stage and failure is stored; a replay command re-runs unfinished events.</p>
+    <div class="stack"><span>Python</span><span>FastAPI</span><span>SQLAlchemy</span><span>Pydantic</span><span>Ollama</span><span>Slack</span></div>
+    <div class="links"><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">source &rarr;</a></div>
+  </article>
 
-      <p class="group">Software</p>
-      <ul class="proj">
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">SupportFlow</a></h3>
-            <span class="status">Complete</span>
-          </div>
-          <p class="p-desc">A support-automation pipeline: signed Tally webhooks are classified by an LLM and summarised to Slack.</p>
-          <ul class="p-list">
-            <li>HMAC-verified, idempotent webhook intake; LLM output validated against a JSON schema with Pydantic and retried with feedback.</li>
-            <li>Every stage and failure is stored, with Slack retries, monitoring endpoints and a replay command for unfinished events.</li>
-          </ul>
-          <div class="stack"><span>Python</span><span>FastAPI</span><span>SQLAlchemy</span><span>Ollama</span><span>Slack</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/supportflow" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/client-delivery-tracker" target="_blank" rel="noopener">Client Delivery Tracker</a></h3>
-            <span class="status">Complete</span>
-          </div>
-          <p class="p-desc">An Excel workbook that logs client requests, tracks them against service targets and writes a weekly report.</p>
-          <ul class="p-list">
-            <li>Dropdown entry, formulas for days open and overdue flags, and conditional formatting for missed targets.</li>
-            <li>A formula-driven dashboard with a status chart, plus a weekly report sheet ready to paste into an email. Built with AI assistance; sample data only.</li>
-          </ul>
-          <div class="stack"><span>Excel</span><span>VLOOKUP</span><span>COUNTIFS</span><span>Python</span><span>openpyxl</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/client-delivery-tracker" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Travelo</a></h3>
-            <span class="status">Team of 3</span>
-          </div>
-          <p class="p-desc">A full-stack trip-planning platform with itineraries, expense splitting and destination maps.</p>
-          <ul class="p-list">
-            <li>I built authentication, document verification and real-time group chat and notifications.</li>
-            <li>REST APIs with Express and MongoDB, JWT auth, and a map view with React Leaflet.</li>
-          </ul>
-          <div class="stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/penalty-shootout-opengl" target="_blank" rel="noopener">Penalty Shootout</a></h3>
-            <span class="status">Complete</span>
-          </div>
-          <p class="p-desc">A 3D penalty-shootout game with player-vs-player and player-vs-computer modes.</p>
-          <ul class="p-list">
-            <li>AI goalkeeper with adjustable reaction time, reach and guess accuracy; full match simulation with sudden death.</li>
-            <li>Ball trajectory animation and a polar-coordinate camera.</li>
-          </ul>
-          <div class="stack"><span>Python</span><span>PyOpenGL</span><span>GLUT</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/penalty-shootout-opengl" target="_blank" rel="noopener">Source</a></div>
-        </li>
-        <li>
-          <div class="p-head">
-            <h3 class="p-title"><a href="https://github.com/roy032/network-design-vlsm" target="_blank" rel="noopener">Enterprise Network Design</a></h3>
-            <span class="status">Coursework</span>
-          </div>
-          <p class="p-desc">A hierarchical, VLSM-subnetted network for 4 sites and about 2,100 hosts, with OSPF and static routing, central DHCP and DNS, and hosted web and email services.</p>
-          <div class="stack"><span>Cisco Packet Tracer</span><span>OSPF</span><span>VLSM</span></div>
-          <div class="p-links"><a href="https://github.com/roy032/network-design-vlsm" target="_blank" rel="noopener">Source</a></div>
-        </li>
-      </ul>
-    </section>
+  <article class="card">
+    <div class="top"><h3>Brain MRI classification</h3><span class="tag on">Research &middot; in progress</span></div>
+    <p>Four-class MRI classifier (healthy, Alzheimer&rsquo;s, Parkinson&rsquo;s, multiple sclerosis). ImageNet-pretrained backbones adapted with masked-autoencoder pre-training; a healthy-reference memory feeds an interpretable head. Benchmarks are pending, so none are shown.</p>
+    <div class="stack"><span>PyTorch</span><span>timm</span><span>ConvNeXt</span><span>Swin</span><span>MAE</span></div>
+  </article>
 
-    <section id="skills">
-      <h2>Skills</h2>
-      <dl class="skills">
-        <dt>Languages</dt><dd>Python, JavaScript/TypeScript, SQL, C++</dd>
-        <dt>ML</dt><dd>PyTorch, timm, scikit-learn, pandas, NumPy</dd>
-        <dt>AI engineering</dt><dd>RAG pipelines, embeddings, Qdrant, LLM APIs, prompt design</dd>
-        <dt>Web</dt><dd>React, Node.js, Express, MongoDB, Socket.IO, REST APIs, JWT</dd>
-        <dt>Tools</dt><dd>Git, GitHub, Linux, Jupyter, Google Colab, Postman</dd>
-      </dl>
-    </section>
+  <article class="card">
+    <div class="top"><h3><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">CineScope</a></h3><span class="tag on">In progress</span></div>
+    <p>Computer vision for film analysis, built phase by phase: implement the core method from scratch, then benchmark it against the production library. Shot-cut detection, camera motion, a shot-framing CNN and a CenterNet face detector are built.</p>
+    <ul class="metrics">
+      <li><b>0.59 / 0.73 / 0.79</b><span>face AP, WIDER Easy / Med / Hard</span></li>
+      <li><b>96</b><span>tests passing (21 need PyTorch)</span></li>
+    </ul>
+    <div class="stack"><span>PyTorch</span><span>NumPy</span><span>OpenCV</span><span>CenterNet</span></div>
+    <div class="links"><a href="https://github.com/roy032/cinescope" target="_blank" rel="noopener">source &rarr;</a></div>
+  </article>
 
-    <section id="education">
-      <h2>Education</h2>
-      <div class="edu">
-        <h3>BRAC University</h3>
-        <span class="when">Expected Jan 2027</span>
-        <p class="deg">B.Sc. in Computer Science · Dhaka</p>
-        <p class="course">Coursework: Data Structures and Algorithms, Database Systems, Software Engineering, Computer Networks, Statistics.</p>
-      </div>
-      <h2 style="margin-top:48px">Certifications</h2>
-      <ul class="certs">
-        <li><span>DataCamp — AI Engineer for Developers (Associate)</span><span class="when">Feb 2026</span></li>
-        <li><span>DataCamp — Data Analyst (Associate)</span><span class="when">Aug 2025</span></li>
-      </ul>
-    </section>
+  <div class="grid">
+    <article class="card">
+      <div class="top"><h3><a href="https://github.com/roy032/client-delivery-tracker" target="_blank" rel="noopener">Client Delivery Tracker</a></h3><span class="tag">Complete</span></div>
+      <p>Excel workbook that tracks client requests against service targets, with a dashboard and an auto-written weekly report. Built with AI assistance; sample data.</p>
+      <div class="stack"><span>Excel</span><span>VLOOKUP</span><span>COUNTIFS</span></div>
+    </article>
+    <article class="card">
+      <div class="top"><h3><a href="https://github.com/roy032/academic-success-prediction" target="_blank" rel="noopener">Academic outcome prediction</a></h3><span class="tag">Complete</span></div>
+      <p>Leakage-free scikit-learn pipelines compared by stratified cross-validation on macro-F1, with class weighting.</p>
+      <div class="stack"><span>scikit-learn</span><span>pandas</span></div>
+    </article>
+    <article class="card">
+      <div class="top"><h3><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Travelo</a></h3><span class="tag">Team of 3</span></div>
+      <p>Full-stack group trip planner. I built authentication, document verification and real-time messaging.</p>
+      <div class="stack"><span>React</span><span>Node.js</span><span>MongoDB</span><span>Socket.IO</span></div>
+    </article>
+    <article class="card">
+      <div class="top"><h3><a href="https://github.com/roy032/penalty-shootout-opengl" target="_blank" rel="noopener">Penalty Shootout</a></h3><span class="tag">Complete</span></div>
+      <p>3D penalty game with an AI goalkeeper that adapts its dive to where you shoot.</p>
+      <div class="stack"><span>Python</span><span>PyOpenGL</span></div>
+    </article>
+  </div>
+</section>
 
-    <footer>Jayanta Roy · Dhaka</footer>
-  </main>
+<section id="approach">
+  <h2>Approach</h2>
+  <ol class="prin">
+    <li><i>01</i><p><strong>Measure first.</strong> Build the evaluation set before the clever part, so an improvement can be told from a regression.</p></li>
+    <li><i>02</i><p><strong>Report the misses.</strong> Confidence intervals, refusals and failure cases go in the README next to the headline number.</p></li>
+    <li><i>03</i><p><strong>Implement, then compare.</strong> Write the core idea from scratch to understand it, then benchmark it against the library.</p></li>
+    <li><i>04</i><p><strong>Make it run end to end.</strong> A model nobody can call, replay or test is a notebook, not a system.</p></li>
+  </ol>
+</section>
+
+<section id="stack">
+  <h2>Stack</h2>
+  <dl class="stk">
+    <dt>Languages</dt><dd>Python, JavaScript/TypeScript, SQL, C++</dd>
+    <dt>ML</dt><dd>PyTorch, timm, scikit-learn, pandas, NumPy, OpenCV</dd>
+    <dt>LLM systems</dt><dd>RAG, embeddings, hybrid retrieval, reranking, schema-validated outputs, LLM evaluation</dd>
+    <dt>Backend</dt><dd>FastAPI, Starlette, Node.js, Express, MongoDB, REST</dd>
+    <dt>Tooling</dt><dd>Git, GitHub Actions, Docker, Linux, Jupyter, Excel</dd>
+    <dt>Credentials</dt><dd>DataCamp Data Analyst (2025), DataCamp AI Engineer for Developers (2026)</dd>
+  </dl>
+</section>
+
+<section id="activity">
+  <h2>Recent activity</h2>
+  <ul id="feed"><li><span>loading from github&hellip;</span><span></span></li></ul>
+  <p class="note">Live from the public GitHub API.</p>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <p style="margin:0 0 18px;color:var(--muted);max-width:56ch">Open to AI/ML and software engineering roles, and to relocation. Email is the best way to reach me.</p>
+  <div class="cta">
+    <a class="mail" href="mailto:jroyakash4@gmail.com" id="email">jroyakash4@gmail.com</a>
+    <button class="copy" id="copy" type="button">copy</button>
+    <a class="links" href="https://github.com/roy032" target="_blank" rel="noopener" style="margin:0"><span style="color:var(--accent)">github.com/roy032 &rarr;</span></a>
+  </div>
+</section>
+</main>
+
+<footer><span>roy032</span><span>built by hand, no tracking</span></footer>
 </div>
-
 <script>
 (function(){
-  var btn=document.getElementById('copy-email');
-  var em=document.getElementById('email');
-  btn.addEventListener('click',function(){
-    var t=em.textContent;
-    function sel(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected';}
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy'},1600)},sel);
-    } else sel();
+  var b=document.getElementById('copy'),e=document.getElementById('email');
+  b.addEventListener('click',function(){
+    var t=e.textContent;
+    function done(m){b.textContent=m;setTimeout(function(){b.textContent='copy'},1500)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done('copied')},function(){done('select it')})}
+    else{done('select it')}
   });
-  var links=[].slice.call(document.querySelectorAll('nav a'));
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.dataset.sec===e.target.id)})}});
-    },{rootMargin:'-40% 0px -55% 0px'});
-    ['about','projects','skills','education'].forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
-  }
+  var feed=document.getElementById('feed');
+  function ago(d){var s=(Date.now()-new Date(d))/1000;if(s<3600)return Math.max(1,Math.round(s/60))+'m ago';if(s<86400)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago'}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  fetch('https://api.github.com/users/roy032/events/public?per_page=30').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(ev){
+    var seen={},rows=[];
+    ev.forEach(function(x){
+      if(x.type!=='PushEvent'||!x.payload||!x.payload.commits||!x.payload.commits.length)return;
+      var repo=x.repo.name.split('/')[1];if(seen[repo]||repo==='roy032'||repo==='roy032.github.io')return;seen[repo]=1;
+      var n=x.payload.commits.length,m=x.payload.commits[n-1].message.split('\n')[0];
+      rows.push('<li><span><a href="https://github.com/'+esc(x.repo.name)+'" target="_blank" rel="noopener">'+esc(repo)+'</a> &middot; '+esc(m.slice(0,64))+'</span><time datetime="'+esc(x.created_at)+'">'+ago(x.created_at)+'</time></li>');
+    });
+    if(!rows.length)throw 0;
+    feed.innerHTML=rows.slice(0,6).join('');
+  }).catch(function(){var s=feed.closest('section');if(s)s.style.display='none';var n=document.querySelector('nav a[href="#activity"]');if(n)n.style.display='none'});
 })();
 </script>
 </body>
