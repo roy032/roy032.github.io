@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Jayanta Roy","url":"https://roy032.github.io/","email":"mailto:jroyakash4@gmail.com","jobTitle":"AI/ML and software engineer","alumniOf":{"@type":"CollegeOrUniversity","name":"BRAC University"},"sameAs":["https://github.com/roy032","https://www.linkedin.com/in/jayanta-roy-b80357407/"]}
+{"@context":"https://schema.org","@type":"Person","name":"Jayanta Roy","url":"https://roy032.github.io/","email":"mailto:jroyakash4@gmail.com","jobTitle":"AI/ML and software engineer","alumniOf":{"@type":"CollegeOrUniversity","name":"BRAC University"},"sameAs":["https://github.com/roy032","https://www.linkedin.com/in/roy032/"]}
 </script>
 <style>
 :root{
@@ -74,7 +74,20 @@ h1{font-weight:700;font-size:clamp(2.3rem,7vw,3.6rem);line-height:1.04;letter-sp
 .termLine input{flex:1;background:none;border:0;outline:0;color:var(--fg);font:inherit;padding:0;min-width:0}
 .termLine input::placeholder{color:var(--dim)}
 .termLine .cur{width:.55em;height:1em;background:var(--accent);animation:blink 1.1s steps(1) infinite;flex:none}
-.hint{font:400 .74rem var(--mono);color:var(--dim);margin:10px 0 0;display:flex;align-items:center;gap:6px}
+.term{max-height:380px;overflow-y:auto;scrollbar-width:thin}
+.term.glow{animation:glow 1.6s ease-out}
+@keyframes glow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 70%,transparent);border-color:var(--accent)}100%{box-shadow:0 0 0 18px transparent}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.chips button{font:400 .74rem var(--mono);background:var(--panel-2);color:var(--accent);border:1px solid var(--line);padding:5px 11px;border-radius:99px;cursor:pointer}
+.chips button:hover{border-color:var(--accent)}
+.chips button::before{content:"$ ";color:var(--dim)}
+.found{color:var(--muted);white-space:nowrap}
+.found b{color:var(--accent);font-weight:500}
+#toast{position:fixed;right:16px;bottom:16px;z-index:30;max-width:min(360px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--accent);border-radius:10px;padding:10px 14px;font:400 .78rem/1.5 var(--mono);color:var(--fg);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none}
+#toast.on{opacity:1;transform:none}
+#toast b{color:var(--accent);font-weight:500}
+.card.flash{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.hint{font:400 .74rem var(--mono);color:var(--dim);margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .hint code{color:var(--accent);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font:inherit}
 @keyframes hintbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 .hint::before{content:"\2191";animation:hintbounce 1.6s ease-in-out infinite;color:var(--accent)}
@@ -234,7 +247,14 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       <span class="cur" aria-hidden="true"></span>
     </div>
   </div>
-  <p class="hint" aria-hidden="true">&uarr; this terminal is real &mdash; try typing <code>help</code> or <code>superpower</code> and press Enter</p>
+  <div class="chips" aria-label="Quick commands">
+    <button type="button" data-cmd="help">help</button>
+    <button type="button" data-cmd="superpower">superpower</button>
+    <button type="button" data-cmd="measure">measure</button>
+    <button type="button" data-cmd="ls">ls</button>
+  </div>
+  <p class="hint">this terminal is real &mdash; type <code>help</code>, tap a command above, or press <code>/</code> anywhere to jump here &middot; <span class="found"><b id="foundN">0</b>/<b id="totalN">0</b> commands discovered</span></p>
+  <div id="toast" role="status" aria-live="polite"></div>
   <div class="hcta">
     <a class="btn" href="#work">see the work</a>
     <a class="btn ghost" href="mailto:jroyakash4@gmail.com">email me</a>
@@ -345,7 +365,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     <div class="links"><a href="https://github.com/roy032/network-design-vlsm" target="_blank" rel="noopener">source &rarr;</a></div>
   </article>
 
-  <article class="card reveal">
+  <article class="card reveal" id="p-thesis">
     <div class="top"><h3>Brain MRI classification</h3><span class="tag on">Thesis &middot; in progress</span></div>
     <p class="kicker">Medical imaging &middot; research</p>
     <p>Four-class MRI classifier (healthy, Alzheimer&rsquo;s, Parkinson&rsquo;s, multiple sclerosis). ImageNet-pretrained backbones adapted with masked-autoencoder pre-training; a healthy-reference memory feeds an interpretable head. Benchmarks are pending, so none are shown.</p>
@@ -434,13 +454,13 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
   <div class="cta">
     <a class="btn" href="mailto:jroyakash4@gmail.com" id="email">jroyakash4@gmail.com</a>
     <button class="copy" id="copy" type="button">copy</button>
-    <a class="btn ghost" href="https://www.linkedin.com/in/jayanta-roy-b80357407/" target="_blank" rel="noopener">linkedin &rarr;</a>
+    <a class="btn ghost" href="https://www.linkedin.com/in/roy032/" target="_blank" rel="noopener">linkedin &rarr;</a>
     <a class="btn ghost" href="https://github.com/roy032" target="_blank" rel="noopener">github &rarr;</a>
   </div>
 </section>
 </main>
 
-<footer><span>Jayanta Roy</span><span>built by hand, no tracking</span></footer>
+<footer><span>Jayanta Roy &middot; hosted on AWS Amplify, deployed from <a href="https://github.com/roy032/roy032.github.io" target="_blank" rel="noopener">GitHub</a> on every push</span><span>built by hand, no tracking</span></footer>
 </div>
 <script>
 (function(){
@@ -454,51 +474,119 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
 
   // interactive terminal: the hackathon's creative feature
   (function(){
-    var log=document.getElementById('termLog'),input=document.getElementById('termIn');
-    if(!log||!input)return;
-    function line(cls,html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;log.appendChild(d);input.scrollIntoView({block:'nearest'})}
-    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-    var commands={
-      help:function(){return ['available: help, about, projects, skills, approach, contact, superpower, whoami, github, clear','tip: press Enter to run, Tab-complete is not implemented (I measure things, not everything)'].join('\n')},
-      about:function(){scrollTo('about');return 'jumping to About me ↓'},
-      projects:function(){scrollTo('work');return 'jumping to Selected work ↓'},
-      skills:function(){scrollTo('skills');return 'jumping to Skills ↓'},
-      approach:function(){scrollTo('approach');return 'jumping to Approach ↓'},
-      contact:function(){scrollTo('contact');return 'jumping to Contact ↓'},
-      whoami:function(){return 'jayanta-roy — AI/ML + software engineer, BRAC University, Jan 2027'},
-      github:function(){window.open('https://github.com/roy032','_blank','noopener');return 'opening github.com/roy032 …'},
-      ls:function(){return commands.help()},
-      pwd:function(){return '/home/jayanta/portfolio'},
-      date:function(){return new Date().toString()},
-      sudo:function(){return 'nice try — this terminal only has read access to my career. [sudo] password for visitor: ✗'},
-      clear:function(){log.innerHTML='';return null},
-      superpower:function(){runSuperpower();return null}
-    };
+    var term=document.getElementById('terminal'),log=document.getElementById('termLog'),input=document.getElementById('termIn');
+    if(!term||!log||!input)return;
     var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function scrollTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'})}
-    function runSuperpower(){
-      var frames=['[ loading superpower ..........  ]','[ loading superpower ########..  ]','[ loading superpower ########### ]'];
+    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+    function line(cls,html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;log.appendChild(d);term.scrollTop=term.scrollHeight}
+    function jump(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'})}
+
+    var projects={
+      'bd-legal-rag':{repo:'bd-legal-rag',t:'Bangla/English legal Q&A, every sentence cited to a section. 90.7% right section in the top 5.'},
+      'cinescope':{repo:'cinescope',t:'Film analysis CV, 10 phases built from scratch then benchmarked vs the library. 15h → 5h per film.'},
+      'qualitylens':{repo:'qualitylens',t:'Full QA suite on a real app (Gitea). 589 tests, 12 confirmed bugs, 95.9% mutation score.'},
+      'supportflow':{repo:'supportflow',t:'Signed webhooks → LLM triage → Slack. Fails closed, idempotent, replayable.'},
+      'network-design':{repo:'network-design-vlsm',t:'Network as code: one spec file, a routing simulator proves reachability in CI.'},
+      'scalability-research':{repo:'web-server-scalability-research',t:'Node.js vs NGINX benchmarks. 67% latency cut, 1000 users under 100ms on 2 cores.'},
+      'travelo':{repo:'Travelo',t:'Group trip planner, team of 3. I built auth, ID verification, chat and notifications.'},
+      'thesis':{id:'p-thesis',t:'Brain MRI classification across 4 conditions. In progress, so no numbers yet.'}
+    };
+    function card(name){var p=projects[name];if(!p)return null;if(p.id)return document.getElementById(p.id);var a=document.querySelector('a[href="https://github.com/roy032/'+p.repo+'"]');return a?a.closest('article'):null}
+
+    // keystroke timing, for `measure`
+    var lastKey=0,gaps=[];
+    function measure(){
+      if(gaps.length<15)return 'not enough data: '+gaps.length+' keystroke gaps so far, I need 15.\ntype a couple more commands, then run measure again.\n(I don’t report numbers I can’t defend.)';
+      function cpm(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return 60000/(s/a.length)}
+      var est=cpm(gaps),bs=[];
+      for(var i=0;i<1000;i++){var s=[];for(var j=0;j<gaps.length;j++)s.push(gaps[Math.random()*gaps.length|0]);bs.push(cpm(s))}
+      bs.sort(function(a,b){return a-b});
+      return 'your typing speed: '+Math.round(est)+' chars/min (~'+Math.round(est/5)+' wpm)\n95% CI ['+Math.round(bs[25])+', '+Math.round(bs[974])+'], '+gaps.length+' keystroke gaps, 1000 bootstrap resamples\nthat’s how every number on this page gets reported: estimate, interval, sample size.';
+    }
+
+    function superpower(){
+      var frames=['[ loading superpower ..........  ]','[ loading superpower #####.....  ]','[ loading superpower ########### ]'];
       var i=0,el=document.createElement('div');el.className='out';log.appendChild(el);
-      var iv=setInterval(function(){el.textContent=frames[i%frames.length];i++;input.scrollIntoView({block:'nearest'})},160);
+      var iv=setInterval(function(){el.textContent=frames[Math.min(i,frames.length-1)];i++;term.scrollTop=term.scrollHeight},180);
       setTimeout(function(){
-        clearInterval(iv);
-        el.remove();
-        line('super','ACCESS GRANTED.\nSUPERPOWER: I turn &ldquo;it feels right&rdquo; into a number and a 95% confidence interval — then I ship the thing anyway, misses and all.');
+        clearInterval(iv);el.remove();
+        line('super','ACCESS GRANTED.\nSUPERPOWER: I turn “it feels right” into a number and a 95% confidence interval, then I ship the thing anyway, misses and all.\ntry it on yourself: type a few commands, then run measure.');
+        if(!reduceMotion){term.classList.remove('glow');void term.offsetWidth;term.classList.add('glow')}
       },620);
     }
+
+    var history=[],hi=0;
+    var commands={
+      help:function(){return 'explore:  ls · open <project> · cat <project> · stats\njump to:  about · projects · skills · contact\nme:       whoami · superpower · measure · hire · github\nmisc:     history · clear · …and a couple I won’t list\ntips: Tab completes, ↑ recalls, press / anywhere to come back here'},
+      ls:function(){return Object.keys(projects).map(function(k){return k+'/'}).join('   ')+'\n(try: cat qualitylens, or open cinescope)'},
+      cat:function(a){if(!a)return 'usage: cat <project>   (see ls)';var p=projects[a];return p?p.t:'cat: '+a+': no such project (see ls)'},
+      open:function(a){if(!a)return 'usage: open <project>   (see ls)';var c=card(a);if(!c)return 'open: '+a+': no such project (see ls)';c.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});c.classList.add('flash');setTimeout(function(){c.classList.remove('flash')},2200);return 'opening '+a+' ↓'},
+      about:function(){jump('about');return 'jumping to About me ↓'},
+      projects:function(){jump('work');return 'jumping to Selected work ↓'},
+      skills:function(){jump('skills');return 'jumping to Skills ↓'},
+      contact:function(){jump('contact');return 'jumping to Contact ↓'},
+      whoami:function(){return 'jayanta roy: AI/ML + software engineer, BRAC University CSE, Jan 2027. Dhaka → anywhere.'},
+      superpower:function(){superpower();return null},
+      measure:measure,
+      stats:function(){return '10 finished projects · 589 tests in QualityLens alone · 10/10 CineScope phases\n90.7% top-5 legal retrieval · 12 confirmed bugs found in Gitea · 1 thesis in progress\n0 numbers on this page without a source link'},
+      hire:function(){var e='jroyakash4@gmail.com';try{navigator.clipboard.writeText(e)}catch(_){}return 'email copied: '+e+'\navailable from January 2027, open to relocation. I reply fast.'},
+      github:function(){window.open('https://github.com/roy032','_blank','noopener');return 'opening github.com/roy032 …'},
+      history:function(){return history.length?history.map(function(h,i){return (i+1)+'  '+h}).join('\n'):'(empty)'},
+      sudo:function(){return '[sudo] password for visitor: ✗\nnice try. this terminal only has read access to my career.'},
+      coffee:function(){return '  ( (\n   ) )\n .______.\n |      |]\n \\      /\n  `----´\nbrewing… 1 coffee, 0 bugs fixed, p > 0.05. inconclusive. another one.'},
+      clear:function(){log.innerHTML='';return null}
+    };
+    var hidden={sudo:1,coffee:1};
+
+    // discovery counter, remembered per visitor
+    var KEY='jr.discovered',found={};
+    try{found=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(_){found={}}
+    var total=Object.keys(commands).length,foundN=document.getElementById('foundN'),totalN=document.getElementById('totalN'),toast=document.getElementById('toast'),tt;
+    function count(){var n=0;for(var k in found)if(commands[k])n++;return n}
+    function render(){if(foundN)foundN.textContent=count();if(totalN)totalN.textContent=total}
+    function notify(html){if(!toast)return;toast.innerHTML=html;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},2600)}
+    function discover(name){
+      if(found[name])return;
+      found[name]=1;try{localStorage.setItem(KEY,JSON.stringify(found))}catch(_){}
+      render();
+      var n=count();
+      if(n===total)notify('<b>all '+total+' commands discovered.</b> you’re thorough. so am I — type <b>hire</b>.');
+      else notify('unlocked <b>'+esc(name)+'</b>'+(hidden[name]?' (a hidden one!)':'')+' · '+n+'/'+total);
+    }
+    render();
+
     function run(raw){
-      var cmd=raw.trim();
-      if(!cmd)return;
+      var cmd=raw.trim();if(!cmd)return;
+      history.push(cmd);hi=history.length;
       line('echo','<span class="c">$</span> '+esc(cmd));
-      var fn=commands[cmd.toLowerCase()];
-      if(!fn){line('err','command not found: '+esc(cmd)+' (try `help`)');return}
-      var out=fn();
+      var parts=cmd.split(/\s+/),name=parts[0].toLowerCase(),arg=(parts[1]||'').toLowerCase();
+      var fn=commands[name];
+      if(!fn){line('err','command not found: '+esc(parts[0])+' (try help)');return}
+      var out=fn(arg);
       if(out)line('out',esc(out).replace(/\n/g,'<br>'));
+      discover(name);
+    }
+    function complete(){
+      var v=input.value,parts=v.split(/\s+/),pool,prefix;
+      if(parts.length>1&&(parts[0]==='open'||parts[0]==='cat')){pool=Object.keys(projects);prefix=parts[1]}
+      else{pool=Object.keys(commands).filter(function(k){return !hidden[k]});prefix=parts[0]}
+      var m=pool.filter(function(k){return k.indexOf(prefix)===0});
+      if(m.length===1)input.value=(parts.length>1?parts[0]+' ':'')+m[0]+(parts.length>1?'':' ');
+      else if(m.length>1)line('out',m.join('   '));
     }
     input.addEventListener('keydown',function(ev){
       if(ev.key==='Enter'){var v=input.value;input.value='';run(v)}
+      else if(ev.key==='Tab'){ev.preventDefault();complete()}
+      else if(ev.key==='ArrowUp'){if(hi>0){hi--;input.value=history[hi];ev.preventDefault()}}
+      else if(ev.key==='ArrowDown'){if(hi<history.length-1){hi++;input.value=history[hi]}else{hi=history.length;input.value=''}ev.preventDefault()}
+      else if(ev.key.length===1){var now=performance.now();if(lastKey&&now-lastKey<1500)gaps.push(now-lastKey);lastKey=now}
     });
-    document.getElementById('terminal').addEventListener('click',function(){input.focus()});
+    term.addEventListener('click',function(ev){if(!window.getSelection||!String(window.getSelection()))input.focus()});
+    [].forEach.call(document.querySelectorAll('.chips button'),function(b){b.addEventListener('click',function(){run(b.dataset.cmd);input.focus({preventScroll:true})})});
+    document.addEventListener('keydown',function(ev){
+      var t=ev.target,tag=t&&t.tagName;
+      if(ev.key==='/'&&tag!=='INPUT'&&tag!=='TEXTAREA'&&!t.isContentEditable){ev.preventDefault();term.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});input.focus({preventScroll:true})}
+    });
   })();
 
   // sticky bar border + active section
