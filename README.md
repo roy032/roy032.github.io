@@ -15,7 +15,7 @@ Every project I build follows one rule: measure it before you trust it, and repo
 |---|---|
 | `measure` | Times the gaps between your keystrokes and reports your typing speed with a **95% bootstrap confidence interval** (1,000 resamples) and the sample size. Below 15 samples it refuses to answer. |
 | `reflex` | Five-round reaction-time test that works by tapping, so phones get a real number too. Reports the mean with a bootstrap interval, and tells you plainly that n = 5 makes it wide. |
-| **you vs. the crowd** | After `measure` or `reflex`, the result is compared live with every earlier visitor: *"faster than 72% of the 412 visitors before you; given your own 95% interval, somewhere between 61% and 81%."* The uncertainty in your own result carries through to your rank. |
+| **you vs. the crowd** | After `measure` or `reflex`, the result is compared live with every earlier visitor, for example *"faster than 72% of the 412 visitors before you; given your own 95% interval, somewhere between 61% and 81%."* The uncertainty in your own result carries through to your rank. |
 | `superpower` | Unlock animation, then the superpower itself. |
 | `ls`, `cat <project>`, `open <project>` | Explore the projects from the shell; `open` scrolls to the card and highlights it. |
 | `about`, `projects`, `skills`, `contact` | Jump to a section. |
@@ -67,3 +67,5 @@ python -m http.server 8000
 ```
 
 Then open http://localhost:8000. There's nothing to install.
+
+The full write-up, with the architecture, measurements and what went wrong along the way, is in [PROJECT_WRITEUP.md](PROJECT_WRITEUP.md).
