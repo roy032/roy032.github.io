@@ -3,7 +3,9 @@
 **Live on AWS Amplify:** https://main.d21y6lk1nky3c1.amplifyapp.com
 Also served from this repo by GitHub Pages: https://roy032.github.io
 
-My portfolio as one hand-written HTML file: no framework, no build step, no tracking. It's my entry for the [AWS Student Builder Challenge: Build Your Tech Superpower](https://builder.aws.com/build/hackathons/3bff5627-ef21-3bfc-acfc-fce21d39a4f6/aws-student-builder-challenge-build-your-tech-superpower).
+My portfolio as a single HTML file: no framework, no build step, no tracking. It's my entry for the [AWS Student Builder Challenge: Build Your Tech Superpower](https://builder.aws.com/build/hackathons/3bff5627-ef21-3bfc-acfc-fce21d39a4f6/aws-student-builder-challenge-build-your-tech-superpower).
+
+**Built with an AI coding agent.** I directed the work and made the decisions, the AWS setup and the account steps that need a human. [Claude Code](https://claude.com/claude-code) wrote most of the code, and ran the tests and audits.
 
 ## The creative feature: a terminal that measures you back
 
