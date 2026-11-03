@@ -1,0 +1,162 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Crowd comparison for the portfolio terminal: compares a visitor's measure or
+  reflex result with everyone before them. Stores only counts per bucket
+  (no IPs, no identifiers).
+
+Parameters:
+  AllowedOrigins:
+    Type: CommaDelimitedList
+    Default: https://main.d21y6lk1nky3c1.amplifyapp.com,https://roy032.github.io,http://localhost:8765
+  BudgetEmail:
+    Type: String
+    Default: ''
+    Description: Optional. Email for a USD 1/month budget alert on this account.
+
+Conditions:
+  HasBudgetEmail: !Not [!Equals [!Ref BudgetEmail, '']]
+
+Resources:
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: portfolio-crowd
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: metric, AttributeType: S }]
+      KeySchema: [{ AttributeName: metric, KeyType: HASH }]
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/portfolio-crowd
+      RetentionInDays: 14
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: crowd-least-privilege
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:UpdateItem]
+                Resource: !GetAtt Table.Arn
+              - Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !Sub '${LogGroup.Arn}:*'
+
+  Fn:
+    Type: AWS::Lambda::Function
+    DependsOn: LogGroup
+    Properties:
+      FunctionName: portfolio-crowd
+      Runtime: nodejs22.x
+      Handler: index.handler
+      MemorySize: 128
+      Timeout: 5
+      Role: !GetAtt Role.Arn
+      Environment:
+        Variables: { TABLE: !Ref Table }
+      Code:
+        ZipFile: |
+          // Compare a visitor's result with everyone before them, then count it.
+          // Only bucket counts are stored: no IP, no identifier, no raw samples.
+          const {DynamoDBClient,GetItemCommand,UpdateItemCommand}=require('@aws-sdk/client-dynamodb');
+          const db=new DynamoDBClient({}),T=process.env.TABLE;
+          // w: bucket width; low: lower is better; n: minimum sample size
+          const M={reflex:{w:10,min:100,max:1500,low:true,n:5},typing:{w:10,min:60,max:1500,low:false,n:15}};
+          const out=(c,b)=>({statusCode:c,headers:{'content-type':'application/json'},body:JSON.stringify(b)});
+          const NO=()=>out(422,{error:'implausible result, not counted'});
+          exports.handler=async e=>{
+            let q;try{q=JSON.parse(e.body||'{}')}catch{return out(400,{error:'bad json'})}
+            const m=M[q.metric];if(!m)return out(400,{error:'unknown metric'});
+            const v=+q.value,lo=+q.lo,hi=+q.hi,n=q.n|0;
+            if(![v,lo,hi].every(Number.isFinite)||n<m.n||n>5000||lo>v||v>hi||v<m.min||v>m.max)return NO();
+            if(q.metric==='reflex'){const s=q.samples;
+              if(!Array.isArray(s)||s.length!==5||s.some(x=>!(x>=80&&x<=3000))||Math.abs(s.reduce((a,b)=>a+b,0)/5-v)>1)return NO()}
+            const it=(await db.send(new GetItemCommand({TableName:T,Key:{metric:{S:q.metric}}}))).Item||{};
+            let total=0;const h=[];
+            for(const k in it)if(k[0]==='b'){const c=+it[k].N;h.push([+k.slice(1),c]);total+=c}
+            // share of earlier visitors this result beats; ties count half
+            const pct=x=>{if(!total)return null;const b=Math.floor(x/m.w);let w=0;
+              for(const[i,c]of h){if(m.low?i>b:i<b)w+=c;else if(i===b)w+=c/2}
+              return Math.round(1000*w/total)/10};
+            await db.send(new UpdateItemCommand({TableName:T,Key:{metric:{S:q.metric}},
+              UpdateExpression:'ADD #b :one, #t :one',ExpressionAttributeNames:{'#b':'b'+Math.floor(v/m.w),'#t':'total'},
+              ExpressionAttributeValues:{':one':{N:'1'}}}));
+            const a=pct(lo),b=pct(hi);
+            return out(200,{others:total,pct:pct(v),pctLo:total?Math.min(a,b):null,pctHi:total?Math.max(a,b):null});
+          };
+
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: portfolio-crowd
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: !Ref AllowedOrigins
+        AllowMethods: [POST]
+        AllowHeaders: [content-type]
+        MaxAge: 3600
+
+  Integration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt Fn.Arn
+      PayloadFormatVersion: '2.0'
+
+  Route:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref Api
+      RouteKey: POST /score
+      Target: !Sub integrations/${Integration}
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref Api
+      StageName: $default
+      AutoDeploy: true
+      # Very low limits throttle real visitors early (the allowance is split across
+      # API Gateway's fleet); Lambda's account concurrency still caps the worst case.
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 50
+        ThrottlingRateLimit: 25
+
+  InvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Fn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/*/score
+
+  Budget:
+    Type: AWS::Budgets::Budget
+    Condition: HasBudgetEmail
+    Properties:
+      Budget:
+        BudgetName: portfolio-crowd-monthly
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: { Amount: 1, Unit: USD }
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 50
+          Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref BudgetEmail }]
+
+Outputs:
+  ScoreUrl:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/score

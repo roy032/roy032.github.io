@@ -189,7 +189,7 @@ dl.stk dd{margin:0}
 #feed time{white-space:nowrap}
 
 .cta{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
-.btn{font:500 .9rem var(--mono);color:var(--accent-ink);background:var(--accent);padding:10px 16px;border-radius:8px;text-decoration:none;border:1px solid var(--accent)}
+.btn{cursor:pointer;font:500 .9rem var(--mono);color:var(--accent-ink);background:var(--accent);padding:10px 16px;border-radius:8px;text-decoration:none;border:1px solid var(--accent)}
 .btn:hover{filter:brightness(1.08)}
 .btn.ghost{background:none;color:var(--fg);border-color:var(--line);font-weight:400}
 .btn.ghost:hover{border-color:var(--accent);filter:none}
@@ -260,7 +260,8 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
   <p class="hint">this terminal is real &mdash; type <code>help</code>, tap a command above, or press <code>/</code> anywhere to jump here <span class="found">&middot; <b id="foundN">0</b>/<b id="totalN">0</b> commands discovered</span></p>
   <div id="toast" role="status" aria-live="polite"></div>
   <div class="hcta">
-    <a class="btn" href="#work">see the work</a>
+    <button type="button" class="btn" id="tryReflex">how fast are you? 5 taps &rarr;</button>
+    <a class="btn ghost" href="#work">see the work</a>
     <a class="btn ghost" href="mailto:jroyakash4@gmail.com">email me</a>
   </div>
 </header>
@@ -505,11 +506,42 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       var est=cpm(gaps),bs=[];
       for(var i=0;i<1000;i++){var s=[];for(var j=0;j<gaps.length;j++)s.push(gaps[Math.random()*gaps.length|0]);bs.push(cpm(s))}
       bs.sort(function(a,b){return a-b});
+      crowd({metric:'typing',value:est,lo:Math.min(bs[25],est),hi:Math.max(bs[974],est),n:gaps.length});
       return 'your typing speed: '+Math.round(est)+' chars/min (~'+Math.round(est/5)+' wpm)\n95% CI ['+Math.round(bs[25])+', '+Math.round(bs[974])+'], '+gaps.length+' keystroke gaps, 1000 bootstrap resamples\nthat’s how every number on this page gets reported: estimate, interval, sample size.';
     }
 
     function ci(a,stat){var bs=[];for(var i=0;i<1000;i++){var s=[];for(var j=0;j<a.length;j++)s.push(a[Math.random()*a.length|0]);bs.push(stat(s))}bs.sort(function(x,y){return x-y});return [bs[25],bs[974]]}
     function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length}
+
+    // crowd: compare a result with every earlier visitor (AWS API Gateway + Lambda + DynamoDB).
+    // Only the number is sent; the page works the same if the API is down.
+    var CROWD='https://397lz9w99h.execute-api.ap-southeast-2.amazonaws.com/score';
+    function pc(x){return String(Math.round(x*10)/10)}
+    function crowd(p){
+      if(!window.fetch)return;
+      setTimeout(function(){
+        var el=document.createElement('div');el.className='out';
+        el.textContent='comparing you with everyone who tried this before you (only the number is stored, no IP)…';
+        log.appendChild(el);term.scrollTop=term.scrollHeight;
+        var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort()},6000);
+        fetch(CROWD,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(p),signal:ctl?ctl.signal:undefined})
+          .then(function(r){return r.json().then(function(b){return{s:r.status,b:b}})})
+          .then(function(x){
+            clearTimeout(to);var b=x.b;
+            if(x.s!==200){el.textContent='crowd check: '+(b.error||'not counted')+'.';return}
+            el.className='super';
+            if(!b.others){el.textContent='you’re the first to try this. everyone after you gets compared with you.';}
+            else{
+              var who=b.others===1?'the 1 visitor':'the '+b.others+' visitors';
+              el.innerHTML=esc('faster than '+pc(b.pct)+'% of '+who+' before you.')+'<br>'+
+                esc('given your own 95% interval, somewhere between '+pc(b.pctLo)+'% and '+pc(b.pctHi)+'%.')+
+                (b.others<30?'<br>'+esc('only '+b.others+' to compare against so far, so that number is shaky too.'):'');
+            }
+            term.scrollTop=term.scrollHeight;
+          })
+          .catch(function(){clearTimeout(to);el.textContent='crowd comparison is offline right now. your result above still stands.'});
+      },0);
+    }
 
     // reflex: a reaction-time test that works with taps, so phones get a real number too
     var rx=null;
@@ -531,6 +563,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       if(rx.n<5){armNext();return true}
       var t=rx.times,m=mean(t),c=ci(t,mean);rx=null;
       line('out',('your reaction time: '+Math.round(m)+' ms\n95% CI ['+Math.round(c[0])+', '+Math.round(c[1])+'] ms, n = 5, 1000 bootstrap resamples\nfive samples make a wide interval. I’d rather show you that than pretend it’s narrow.').replace(/\n/g,'<br>'));
+      crowd({metric:'reflex',value:m,lo:Math.min(c[0],m),hi:Math.max(c[1],m),n:5,samples:t});
       return true;
     }
 
@@ -547,7 +580,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
 
     var history=[],hi=0;
     var commands={
-      help:function(){return 'explore:  ls · open <project> · cat <project> · stats\njump to:  about · projects · skills · contact\nme:       whoami · superpower · measure · reflex · hire · github\nmisc:     history · clear · …and a couple I won’t list\ntips: Tab completes, ↑ recalls, press / anywhere to come back here'},
+      help:function(){return 'explore:  ls · open <project> · cat <project> · stats\njump to:  about · projects · skills · contact\nme:       whoami · superpower · measure · reflex · hire · github\nmisc:     history · clear · …and a couple I won’t list\nlive:     reflex and measure compare you with every earlier visitor (AWS Lambda + DynamoDB)\ntips: Tab completes, ↑ recalls, press / anywhere to come back here'},
       ls:function(){return Object.keys(projects).map(function(k){return k+'/'}).join('   ')+'\n(try: cat qualitylens, or open cinescope)'},
       cat:function(a){if(!a)return 'usage: cat <project>   (see ls)';var p=projects[a];return p?p.t:'cat: '+a+': no such project (see ls)'},
       open:function(a){if(!a)return 'usage: open <project>   (see ls)';var c=card(a);if(!c)return 'open: '+a+': no such project (see ls)';c.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});c.classList.add('flash');setTimeout(function(){c.classList.remove('flash')},2200);return 'opening '+a+' ↓'},
@@ -615,6 +648,8 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     });
     term.addEventListener('pointerdown',function(){rxHit()});
     term.addEventListener('click',function(ev){if(!window.getSelection||!String(window.getSelection()))input.focus({preventScroll:true})});
+    var tr=document.getElementById('tryReflex');
+    if(tr)tr.addEventListener('click',function(){if(rx)return;term.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});run('reflex')});
     [].forEach.call(document.querySelectorAll('.chips button'),function(b){b.addEventListener('click',function(){if(rx){rxHit();return}run(b.dataset.cmd);input.focus({preventScroll:true})})});
     document.addEventListener('keydown',function(ev){
       var t=ev.target,tag=t&&t.tagName;
