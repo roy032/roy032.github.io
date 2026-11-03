@@ -14,13 +14,15 @@
 <link rel="canonical" href="https://roy032.github.io/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap"></noscript>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Jayanta Roy","url":"https://roy032.github.io/","email":"mailto:jroyakash4@gmail.com","jobTitle":"AI/ML and software engineer","alumniOf":{"@type":"CollegeOrUniversity","name":"BRAC University"},"sameAs":["https://github.com/roy032","https://www.linkedin.com/in/roy032/"]}
 </script>
 <style>
 :root{
-  --bg:#0b0d10; --panel:#11151a; --panel-2:#0e1216; --fg:#e8ece9; --muted:#8a948f; --dim:#5d6762; --line:#1f262c; --accent:#8ef0c8; --accent-ink:#0b0d10; --warn:#f0c88e;
+  --bg:#0b0d10; --panel:#11151a; --panel-2:#0e1216; --fg:#e8ece9; --muted:#8a948f; --dim:#78827d; --line:#1f262c; --accent:#8ef0c8; --accent-ink:#0b0d10; --warn:#f0c88e;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   --sans:"Inter Tight","Segoe UI",system-ui,sans-serif;
   color-scheme:dark;
@@ -76,6 +78,7 @@ h1{font-weight:700;font-size:clamp(2.3rem,7vw,3.6rem);line-height:1.04;letter-sp
 .termLine .cur{width:.55em;height:1em;background:var(--accent);animation:blink 1.1s steps(1) infinite;flex:none}
 .term{max-height:380px;overflow-y:auto;scrollbar-width:thin}
 .term.glow{animation:glow 1.6s ease-out}
+.term.go{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 45%,transparent)}
 @keyframes glow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 70%,transparent);border-color:var(--accent)}100%{box-shadow:0 0 0 18px transparent}}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
 .chips button{font:400 .74rem var(--mono);background:var(--panel-2);color:var(--accent);border:1px solid var(--line);padding:5px 11px;border-radius:99px;cursor:pointer}
@@ -240,7 +243,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     <div>&rarr; thesis: brain MRI classification (healthy, Alzheimer&rsquo;s, Parkinson&rsquo;s, MS)</div>
     <div>&rarr; cinescope: all 10 phases built, now a one-pass pipeline + web app</div>
     <div>&rarr; bd-legal-rag: fully local and private, one-click Windows setup</div>
-    <div id="termLog"></div>
+    <div id="termLog" role="log" aria-live="polite"></div>
     <div class="termLine">
       <span class="c">$</span>
       <input id="termIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command, try help or superpower, then press Enter">
@@ -251,6 +254,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     <button type="button" data-cmd="help">help</button>
     <button type="button" data-cmd="superpower">superpower</button>
     <button type="button" data-cmd="measure">measure</button>
+    <button type="button" data-cmd="reflex">reflex</button>
     <button type="button" data-cmd="ls">ls</button>
   </div>
   <p class="hint">this terminal is real &mdash; type <code>help</code>, tap a command above, or press <code>/</code> anywhere to jump here &middot; <span class="found"><b id="foundN">0</b>/<b id="totalN">0</b> commands discovered</span></p>
@@ -496,12 +500,38 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     // keystroke timing, for `measure`
     var lastKey=0,gaps=[];
     function measure(){
-      if(gaps.length<15)return 'not enough data: '+gaps.length+' keystroke gaps so far, I need 15.\ntype a couple more commands, then run measure again.\n(I don’t report numbers I can’t defend.)';
+      if(gaps.length<15)return 'not enough data: '+gaps.length+' keystroke gaps so far, I need 15.\ntype a couple more commands, then run measure again, or try reflex (works by tapping, good on phones).\n(I don’t report numbers I can’t defend.)';
       function cpm(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return 60000/(s/a.length)}
       var est=cpm(gaps),bs=[];
       for(var i=0;i<1000;i++){var s=[];for(var j=0;j<gaps.length;j++)s.push(gaps[Math.random()*gaps.length|0]);bs.push(cpm(s))}
       bs.sort(function(a,b){return a-b});
       return 'your typing speed: '+Math.round(est)+' chars/min (~'+Math.round(est/5)+' wpm)\n95% CI ['+Math.round(bs[25])+', '+Math.round(bs[974])+'], '+gaps.length+' keystroke gaps, 1000 bootstrap resamples\nthat’s how every number on this page gets reported: estimate, interval, sample size.';
+    }
+
+    function ci(a,stat){var bs=[];for(var i=0;i<1000;i++){var s=[];for(var j=0;j<a.length;j++)s.push(a[Math.random()*a.length|0]);bs.push(stat(s))}bs.sort(function(x,y){return x-y});return [bs[25],bs[974]]}
+    function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length}
+
+    // reflex: a reaction-time test that works with taps, so phones get a real number too
+    var rx=null;
+    function reflex(){
+      if(rx)return 'a reflex test is already running';
+      rx={n:0,times:[],armed:false,t0:0,timer:null};
+      line('out','reflex test, 5 rounds. when the terminal border turns green, tap the terminal or press any key.<br>tap too early and the round restarts.');
+      armNext();return null;
+    }
+    function armNext(){
+      rx.armed=false;term.classList.remove('go');
+      rx.timer=setTimeout(function(){if(!rx)return;rx.armed=true;rx.t0=performance.now();term.classList.add('go');line('super','NOW!')},1200+Math.random()*2200);
+    }
+    function rxHit(){
+      if(!rx)return false;
+      if(!rx.armed){clearTimeout(rx.timer);line('err','too soon. round '+(rx.n+1)+' restarted.');armNext();return true}
+      var dt=performance.now()-rx.t0;rx.times.push(dt);rx.n++;term.classList.remove('go');
+      line('out','round '+rx.n+': '+Math.round(dt)+' ms');
+      if(rx.n<5){armNext();return true}
+      var t=rx.times,m=mean(t),c=ci(t,mean);rx=null;
+      line('out',('your reaction time: '+Math.round(m)+' ms\n95% CI ['+Math.round(c[0])+', '+Math.round(c[1])+'] ms, n = 5, 1000 bootstrap resamples\nfive samples make a wide interval. I’d rather show you that than pretend it’s narrow.').replace(/\n/g,'<br>'));
+      return true;
     }
 
     function superpower(){
@@ -517,7 +547,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
 
     var history=[],hi=0;
     var commands={
-      help:function(){return 'explore:  ls · open <project> · cat <project> · stats\njump to:  about · projects · skills · contact\nme:       whoami · superpower · measure · hire · github\nmisc:     history · clear · …and a couple I won’t list\ntips: Tab completes, ↑ recalls, press / anywhere to come back here'},
+      help:function(){return 'explore:  ls · open <project> · cat <project> · stats\njump to:  about · projects · skills · contact\nme:       whoami · superpower · measure · reflex · hire · github\nmisc:     history · clear · …and a couple I won’t list\ntips: Tab completes, ↑ recalls, press / anywhere to come back here'},
       ls:function(){return Object.keys(projects).map(function(k){return k+'/'}).join('   ')+'\n(try: cat qualitylens, or open cinescope)'},
       cat:function(a){if(!a)return 'usage: cat <project>   (see ls)';var p=projects[a];return p?p.t:'cat: '+a+': no such project (see ls)'},
       open:function(a){if(!a)return 'usage: open <project>   (see ls)';var c=card(a);if(!c)return 'open: '+a+': no such project (see ls)';c.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});c.classList.add('flash');setTimeout(function(){c.classList.remove('flash')},2200);return 'opening '+a+' ↓'},
@@ -528,6 +558,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       whoami:function(){return 'jayanta roy: AI/ML + software engineer, BRAC University CSE, Jan 2027. Dhaka → anywhere.'},
       superpower:function(){superpower();return null},
       measure:measure,
+      reflex:reflex,
       stats:function(){return '10 finished projects · 589 tests in QualityLens alone · 10/10 CineScope phases\n90.7% top-5 legal retrieval · 12 confirmed bugs found in Gitea · 1 thesis in progress\n0 numbers on this page without a source link'},
       hire:function(){var e='jroyakash4@gmail.com';try{navigator.clipboard.writeText(e)}catch(_){}return 'email copied: '+e+'\navailable from January 2027, open to relocation. I reply fast.'},
       github:function(){window.open('https://github.com/roy032','_blank','noopener');return 'opening github.com/roy032 …'},
@@ -575,16 +606,19 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       else if(m.length>1)line('out',m.join('   '));
     }
     input.addEventListener('keydown',function(ev){
+      if(rx&&ev.key!=='Tab'&&ev.key!=='Shift'){ev.preventDefault();rxHit();return}
       if(ev.key==='Enter'){var v=input.value;input.value='';run(v)}
       else if(ev.key==='Tab'){ev.preventDefault();complete()}
       else if(ev.key==='ArrowUp'){if(hi>0){hi--;input.value=history[hi];ev.preventDefault()}}
       else if(ev.key==='ArrowDown'){if(hi<history.length-1){hi++;input.value=history[hi]}else{hi=history.length;input.value=''}ev.preventDefault()}
       else if(ev.key.length===1){var now=performance.now();if(lastKey&&now-lastKey<1500)gaps.push(now-lastKey);lastKey=now}
     });
-    term.addEventListener('click',function(ev){if(!window.getSelection||!String(window.getSelection()))input.focus()});
-    [].forEach.call(document.querySelectorAll('.chips button'),function(b){b.addEventListener('click',function(){run(b.dataset.cmd);input.focus({preventScroll:true})})});
+    term.addEventListener('pointerdown',function(){rxHit()});
+    term.addEventListener('click',function(ev){if(!window.getSelection||!String(window.getSelection()))input.focus({preventScroll:true})});
+    [].forEach.call(document.querySelectorAll('.chips button'),function(b){b.addEventListener('click',function(){if(rx){rxHit();return}run(b.dataset.cmd);input.focus({preventScroll:true})})});
     document.addEventListener('keydown',function(ev){
       var t=ev.target,tag=t&&t.tagName;
+      if(rx&&tag!=='INPUT'&&tag!=='TEXTAREA'){rxHit();return}
       if(ev.key==='/'&&tag!=='INPUT'&&tag!=='TEXTAREA'&&!t.isContentEditable){ev.preventDefault();term.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});input.focus({preventScroll:true})}
     });
   })();
