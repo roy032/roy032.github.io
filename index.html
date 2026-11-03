@@ -87,10 +87,10 @@ h1{font-weight:700;font-size:clamp(2.3rem,7vw,3.6rem);line-height:1.04;letter-sp
 #toast.on{opacity:1;transform:none}
 #toast b{color:var(--accent);font-weight:500}
 .card.flash{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
-.hint{font:400 .74rem var(--mono);color:var(--dim);margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.hint{font:400 .74rem/1.9 var(--mono);color:var(--dim);margin:10px 0 0}
 .hint code{color:var(--accent);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font:inherit}
 @keyframes hintbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.hint::before{content:"\2191";animation:hintbounce 1.6s ease-in-out infinite;color:var(--accent)}
+.hint::before{content:"\2191";display:inline-block;margin-right:6px;animation:hintbounce 1.6s ease-in-out infinite;color:var(--accent)}
 .about-p{color:var(--muted);max-width:66ch;margin:0 0 14px}
 .about-p:last-child{margin-bottom:0}
 .hcta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
