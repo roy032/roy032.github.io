@@ -387,6 +387,15 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     <button type="button" data-f="other" aria-pressed="false">infra &amp; tools</button>
   </div>
   <div class="grid">
+    <article class="card reveal" id="p-agentwaste" data-t="ml">
+      <div class="top"><h3>AgentWaste reproduction kit</h3><span class="tag">Co-authored &middot; unpublished</span></div>
+      <p>Independent local reproduction of a preregistered study of wasted compute in LLM agent loops, with its original author. 560 matched runs on Qwen3 1.7B/4B/8B, CPU-only. 11 of 13 preregistered checks passed; the two Qwen3-4B success-rate checks failed, and the write-up says so. Paper not yet published.</p>
+      <ul class="metrics">
+        <li><b>11<small>/13</small></b><span>preregistered checks passed</span></li>
+        <li><b>560</b><span>matched runs</span></li>
+      </ul>
+      <div class="stack"><span>Python</span><span>Ollama</span><span>pytest</span><span>Preregistration</span></div>
+    </article>
     <article class="card reveal" data-t="web">
       <div class="top"><h3><a href="https://github.com/roy032/Travelo" target="_blank" rel="noopener">Travelo</a></h3><span class="tag">Team of 3</span></div>
       <p>Collaborative trip planner: itineraries with maps, shared checklists, expense splitting, photos and live group chat. I built auth (HTTP-only JWT), NID/passport verification, trip management, checklists, chat and notifications.</p>
@@ -494,6 +503,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       'network-design':{repo:'network-design-vlsm',t:'Network as code: one spec file, a routing simulator proves reachability in CI.'},
       'scalability-research':{repo:'web-server-scalability-research',t:'Node.js vs NGINX benchmarks. 67% latency cut, 1000 users under 100ms on 2 cores.'},
       'travelo':{repo:'Travelo',t:'Group trip planner, team of 3. I built auth, ID verification, chat and notifications.'},
+      'agentwaste':{id:'p-agentwaste',t:'Co-authored reproduction of a preregistered LLM-agent waste study. 11/13 checks passed, misses disclosed. Unpublished.'},
       'thesis':{id:'p-thesis',t:'Brain MRI classification across 4 conditions. In progress, so no numbers yet.'}
     };
     function card(name){var p=projects[name];if(!p)return null;if(p.id)return document.getElementById(p.id);var a=document.querySelector('a[href="https://github.com/roy032/'+p.repo+'"]');return a?a.closest('article'):null}
@@ -593,7 +603,7 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
       superpower:function(){superpower();return null},
       measure:measure,
       reflex:reflex,
-      stats:function(){return '10 finished projects · 589 tests in QualityLens alone · 10/10 CineScope phases\n90.7% top-5 legal retrieval · 12 confirmed bugs found in Gitea · 1 thesis in progress\n0 numbers on this page without a source link'},
+      stats:function(){return '11 finished projects · 589 tests in QualityLens alone · 10/10 CineScope phases\n90.7% top-5 legal retrieval · 12 confirmed bugs found in Gitea · 1 thesis in progress\nevery number here comes from runs I did (AgentWaste is not published yet)'},
       hire:function(){var e='jroyakash4@gmail.com';try{navigator.clipboard.writeText(e)}catch(_){}return 'email copied: '+e+'\navailable from January 2027, open to relocation. I reply fast.'},
       github:function(){window.open('https://github.com/roy032','_blank','noopener');return 'opening github.com/roy032 …'},
       history:function(){return history.length?history.map(function(h,i){return (i+1)+'  '+h}).join('\n'):'(empty)'},
