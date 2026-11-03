@@ -532,9 +532,10 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
             el.className='super';
             if(!b.others){el.textContent='you’re the first to try this. everyone after you gets compared with you.';}
             else{
-              var who=b.others===1?'the 1 visitor':'the '+b.others+' visitors';
-              el.innerHTML=esc('faster than '+pc(b.pct)+'% of '+who+' before you.')+'<br>'+
-                esc('given your own 95% interval, somewhere between '+pc(b.pctLo)+'% and '+pc(b.pctHi)+'%.')+
+              var n=b.others,all=n===1?'the 1 visitor':'all '+n+' visitors',some=n===1?'the 1 visitor':'the '+n+' visitors';
+              var head=b.pct>=100?'faster than '+all:b.pct<=0?'slower than '+all:'faster than '+pc(b.pct)+'% of '+some;
+              var range=b.pctLo===b.pctHi?'your own 95% interval doesn’t change that.':'given your own 95% interval, somewhere between '+pc(b.pctLo)+'% and '+pc(b.pctHi)+'%.';
+              el.innerHTML=esc(head+' before you.')+'<br>'+esc(range)+
                 (b.others<30?'<br>'+esc('only '+b.others+' to compare against so far, so that number is shaky too.'):'');
             }
             term.scrollTop=term.scrollHeight;
