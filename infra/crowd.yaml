@@ -8,12 +8,17 @@ Parameters:
   AllowedOrigins:
     Type: CommaDelimitedList
     Default: https://main.d21y6lk1nky3c1.amplifyapp.com,https://roy032.github.io,http://localhost:8765
+  AlertEmail:
+    Type: String
+    Default: ''
+    Description: Optional. Email for alarms when the function errors or the API returns 5xx.
   BudgetEmail:
     Type: String
     Default: ''
     Description: Optional. Email for a USD 1/month budget alert on this account.
 
 Conditions:
+  HasAlertEmail: !Not [!Equals [!Ref AlertEmail, '']]
   HasBudgetEmail: !Not [!Equals [!Ref BudgetEmail, '']]
 
 Resources:
@@ -72,9 +77,13 @@ Resources:
           const db=new DynamoDBClient({}),T=process.env.TABLE;
           // w: bucket width; low: lower is better; n: minimum sample size
           const M={reflex:{w:10,min:100,max:1500,low:true,n:5},typing:{w:10,min:60,max:1500,low:false,n:15}};
-          const out=(c,b)=>({statusCode:c,headers:{'content-type':'application/json'},body:JSON.stringify(b)});
+          const out=(c,b)=>({statusCode:c,headers:{'content-type':'application/json','cache-control':'max-age=30'},body:JSON.stringify(b)});
           const NO=()=>out(422,{error:'implausible result, not counted'});
           exports.handler=async e=>{
+            // GET /count: how many results are in each histogram (a number, nothing else)
+            if(e.requestContext.http.method==='GET'){const r={};
+              for(const k in M){const it=(await db.send(new GetItemCommand({TableName:T,Key:{metric:{S:k}}}))).Item;r[k]=it&&it.total?+it.total.N:0}
+              return out(200,r)}
             let q;try{q=JSON.parse(e.body||'{}')}catch{return out(400,{error:'bad json'})}
             const m=M[q.metric];if(!m)return out(400,{error:'unknown metric'});
             const v=+q.value,lo=+q.lo,hi=+q.hi,n=q.n|0;
@@ -102,7 +111,7 @@ Resources:
       ProtocolType: HTTP
       CorsConfiguration:
         AllowOrigins: !Ref AllowedOrigins
-        AllowMethods: [POST]
+        AllowMethods: [GET, POST]
         AllowHeaders: [content-type]
         MaxAge: 3600
 
@@ -119,6 +128,13 @@ Resources:
     Properties:
       ApiId: !Ref Api
       RouteKey: POST /score
+      Target: !Sub integrations/${Integration}
+
+  CountRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref Api
+      RouteKey: GET /count
       Target: !Sub integrations/${Integration}
 
   Stage:
@@ -139,7 +155,50 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref Fn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/*/score
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/*/*
+
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: portfolio-crowd-alerts
+
+  AlertSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties:
+      TopicArn: !Ref AlertTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  FnErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: portfolio-crowd-lambda-errors
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions: [{ Name: FunctionName, Value: !Ref Fn }]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  Api5xxAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: portfolio-crowd-api-5xx
+      Namespace: AWS/ApiGateway
+      MetricName: 5xx
+      Dimensions: [{ Name: ApiId, Value: !Ref Api }]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
 
   Budget:
     Type: AWS::Budgets::Budget
@@ -158,5 +217,7 @@ Resources:
           Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref BudgetEmail }]
 
 Outputs:
+  CountUrl:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/count
   ScoreUrl:
     Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/score

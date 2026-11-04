@@ -90,6 +90,7 @@ h1{font-weight:700;font-size:clamp(2.3rem,7vw,3.6rem);line-height:1.04;letter-sp
 #toast.on{opacity:1;transform:none}
 #toast b{color:var(--accent);font-weight:500}
 .card.flash{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.how{font:400 .78rem/1.7 var(--mono);color:var(--dim);margin:14px 0 0;max-width:62ch}.how summary{cursor:pointer}.how summary:hover{color:var(--fg)}.how p{margin:8px 0 0}
 .hint{font:400 .74rem/1.9 var(--mono);color:var(--dim);margin:10px 0 0}
 .hint code{color:var(--accent);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font:inherit}
 @keyframes hintbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -258,12 +259,14 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     <button type="button" data-cmd="ls">ls</button>
   </div>
   <p class="hint">this terminal is real &mdash; type <code>help</code>, tap a command above, or press <code>/</code> anywhere to jump here <span class="found">&middot; <b id="foundN">0</b>/<b id="totalN">0</b> commands discovered</span></p>
+  <p class="hint" id="crowdN" hidden></p>
   <div id="toast" role="status" aria-live="polite"></div>
   <div class="hcta">
     <button type="button" class="btn" id="tryReflex">how fast are you? 5 taps &rarr;</button>
     <a class="btn ghost" href="#work">see the work</a>
     <a class="btn ghost" href="mailto:jroyakash4@gmail.com">email me</a>
   </div>
+  <details class="how"><summary>how is the ranking calculated?</summary><p>Your 5 taps give a mean and a 95% bootstrap interval (1,000 resamples). The server counts how many earlier results you beat, once at your mean and once at each end of your interval, so the range you see is your own uncertainty carried through to your rank. Only a count per 10&nbsp;ms bucket is stored: no IP, no identifier, no raw taps.</p></details>
 </header>
 
 <main>
@@ -526,6 +529,15 @@ footer{margin-top:72px;padding:22px 0 44px;border-top:1px solid var(--line);font
     // crowd: compare a result with every earlier visitor (AWS API Gateway + Lambda + DynamoDB).
     // Only the number is sent; the page works the same if the API is down.
     var CROWD='https://397lz9w99h.execute-api.ap-southeast-2.amazonaws.com/score';
+    (function(){
+      if(!window.fetch)return;
+      var el=document.getElementById('crowdN');
+      fetch(CROWD.replace(/score$/,'count')).then(function(r){return r.ok?r.json():null}).then(function(b){
+        if(!b)return;var n=(b.reflex|0)+(b.typing|0);
+        if(n<10)return;
+        el.textContent=n+' results so far, from real visitors. try yours.';el.hidden=false;
+      }).catch(function(){});
+    })();
     function pc(x){return String(Math.round(x*10)/10)}
     function crowd(p){
       if(!window.fetch)return;
