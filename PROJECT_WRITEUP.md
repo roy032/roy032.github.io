@@ -64,11 +64,11 @@ There's also Tab completion, ↑/↓ history, tap-to-run chips for phones, a "x/
 | AWS service | What it does here |
 |---|---|
 | **Amplify Hosting** | Serves the site with HTTPS through Amazon CloudFront with Brotli compression (both visible in the response headers). Every push to `main` redeploys automatically, in about 70 seconds each time we measured. |
-| **API Gateway (HTTP API)** | One route, `POST /score`. CORS allows only this site's origins, and the stage is throttled. |
+| **API Gateway (HTTP API)** | Two routes: `POST /score`, and `GET /count` (just the number of results, shown on the page once there are 10). CORS allows only this site's origins, and the stage is throttled. |
 | **Lambda** | Validates the result, reads the histogram, computes your percentile at your estimate and at both ends of your interval, then adds you to the count. |
 | **DynamoDB** | One item per metric (`reflex`, `typing`) holding counts per bucket (10 ms or 10 chars/min). On-demand billing, so it costs nothing while idle. |
 | **IAM** | The function's role can only `GetItem` and `UpdateItem` on that one table and write its own logs. |
-| **CloudWatch Logs** | The function's logs, kept 14 days. |
+| **CloudWatch Logs and Alarms** | The function's logs, kept 14 days, plus alarms on Lambda errors and API Gateway 5xx that publish to an SNS topic. |
 | **CloudFormation** | Everything above (except Amplify) is one template: [`infra/crowd.yaml`](infra/crowd.yaml). |
 | **AWS CLI v2 + `aws login`** | Browser sign-in with temporary credentials, so no access keys exist. `aws sts get-caller-identity` confirmed the right account before anything was deployed. |
 

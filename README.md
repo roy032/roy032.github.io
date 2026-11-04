@@ -54,9 +54,10 @@ browser ──POST /score──► API Gateway (HTTP API, CORS: this site only, 
                          DynamoDB (on-demand): one item per metric, counts per bucket
 ```
 
-- **Infrastructure as code:** one CloudFormation template defines the table, the function, a least-privilege IAM role (`GetItem`/`UpdateItem` on one table), the HTTP API, 14-day CloudWatch Logs, and an optional budget alert. Deploy it with `aws cloudformation deploy --template-file infra/crowd.yaml --stack-name portfolio-crowd --capabilities CAPABILITY_IAM`.
+- **Infrastructure as code:** one CloudFormation template defines the table, the function, a least-privilege IAM role (`GetItem`/`UpdateItem` on one table), the HTTP API (`POST /score`, `GET /count`), two CloudWatch alarms with an SNS topic, 14-day CloudWatch Logs, and an optional budget alert. Deploy it with `aws cloudformation deploy --template-file infra/crowd.yaml --stack-name portfolio-crowd --capabilities CAPABILITY_IAM`.
 - **Privacy:** only the result is sent. The server stores a count per 10 ms (or 10 chars/min) bucket, with no IP address, no identifier and no raw samples.
 - **Cheat-resistant:** results outside human ranges, too few samples, or a reflex mean that doesn't match its five samples get `422` and are never counted.
+- **Live count and alarms:** `GET /count` returns only how many results each histogram holds, and the page shows "N results so far" once there are 10. CloudWatch alarms watch Lambda errors and API 5xx and publish to an SNS topic (email subscription is optional, via the `AlertEmail` parameter).
 - **Static first:** if the API is down, the terminal says so and every result still works offline.
 - The same commit is also served by GitHub Pages, which stays the long-term address.
 
